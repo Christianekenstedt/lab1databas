@@ -29,10 +29,16 @@
           </Menu>
         </menus>
       </MenuBar>
-      <Button fx:id="disconnectButton" mnemonicParsing="false" onAction="#disconnectButtonHandle" prefHeight="100.0" prefWidth="300.0" text="Disconnect!">
-         <VBox.margin>
-            <Insets left="250.0" top="250.0" />
-         </VBox.margin>
-      </Button>
+      <AnchorPane prefHeight="599.0" prefWidth="800.0">
+         <children>
+            <Button fx:id="disconnectButton" layoutX="250.0" layoutY="461.0" mnemonicParsing="false" onAction="#disconnectButtonHandle" prefHeight="100.0" prefWidth="300.0" text="Disconnect!" />
+            <TableView fx:id="table" layoutX="14.0" layoutY="71.0" prefHeight="260.0" prefWidth="800.0" AnchorPane.bottomAnchor="315.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+               <columns>
+                  <TableColumn fx:id="c1" prefWidth="75.0" text="Name" />
+                  <TableColumn fx:id="c2" prefWidth="75.0" text="ID" />
+               </columns>
+            </TableView>
+         </children>
+      </AnchorPane>
    </children>
 </VBox>

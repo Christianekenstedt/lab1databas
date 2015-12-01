@@ -82,9 +82,10 @@ public class FXMLDocumentController implements Initializable {
        
         String user = userPicker.getValue();
         String pwd = passwdTextField.getText();
-        UserData data = new UserData(user,pwd);
-        loader = new FXMLLoader(getClass().getResource("FXMLMainView.fxml"));
-        mainParent = loader.load();
+        if(userPicker.getValue() != null){
+            UserData data = new UserData(user,pwd);
+            loader = new FXMLLoader(getClass().getResource("FXMLMainView.fxml"));
+            mainParent = loader.load();
             
             Scene mainScene = new Scene(mainParent);
             Stage mainStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
@@ -95,8 +96,7 @@ public class FXMLDocumentController implements Initializable {
                 mainStage.hide();
                 mainStage.show();
             }else showAlert("Invalid password!");
-            
-        
+        }else showAlert("No user selected!");
    }
     
     private void showAlert(String message){

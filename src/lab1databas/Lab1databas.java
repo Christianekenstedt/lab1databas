@@ -24,6 +24,7 @@ public class Lab1databas extends Application {
         
         Scene scene = new Scene(root);
         stage.setScene(scene);
+        stage.setTitle("Media Library Login");
         stage.show();
     }
 
