@@ -6,6 +6,9 @@
 package lab1databas;
 
 import java.net.URL;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 import java.util.ResourceBundle;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -33,7 +36,10 @@ public class FXMLDocumentController implements Initializable {
     private TextField passwdTextField;
     @FXML
     private Label titleLabel;
-    private String userOne = "Christian", userTwo = "Gustaf";
+    
+    private String userOne = "christian", userTwo = "gustaf";
+    private Connection con = null;
+    
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
@@ -44,6 +50,7 @@ public class FXMLDocumentController implements Initializable {
 
     @FXML
     private void handleUserPick(ActionEvent event) {
+        
     }
 
     @FXML
@@ -51,11 +58,30 @@ public class FXMLDocumentController implements Initializable {
         String database = "medialibrary";
         String server ="jdbc:mysql://db.christianekenstedt.se:3306/" + database +
 			"?UseClientEnc=UTF8";
-        if(userPicker.getValue().equals(userOne)){
-            if(passwdTextField.getText().equals("christian")) System.out.println("Correct");
-            else System.out.println("Incorrect!");
-        }else if (userPicker.getValue().equals(userTwo)){
-            
+        String user = userPicker.getValue();
+        String pwd = passwdTextField.getText();
+        connectToDB(server,user,pwd);
+        
+    }
+    
+    private void connectToDB(String server, String user, String pwd){
+        try {	
+			Class.forName("com.mysql.jdbc.Driver").newInstance();
+			con = DriverManager.getConnection(server, user, pwd);
+			System.out.println("Connected!");
+        }
+		catch(Exception e) {
+			javax.swing.JOptionPane.showMessageDialog(null, 
+				"Database error, " + e.toString());
+		}
+        finally {
+        	try {
+        		if(con != null) {
+        			con.close();
+        			System.out.println("Connection closed.");
+        		}
+        	} 
+        	catch(SQLException e) {}
         }
     }
     
