@@ -48,6 +48,9 @@ public class FXMLDocumentController implements Initializable {
 
     @FXML
     private void handlePasswdInput(ActionEvent event) {
+        String database = "medialibrary";
+        String server ="jdbc:mysql://db.christianekenstedt.se:3306/" + database +
+			"?UseClientEnc=UTF8";
         if(userPicker.getValue().equals(userOne)){
             if(passwdTextField.getText().equals("christian")) System.out.println("Correct");
             else System.out.println("Incorrect!");
