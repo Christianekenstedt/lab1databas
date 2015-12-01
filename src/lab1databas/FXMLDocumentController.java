@@ -15,6 +15,8 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -60,19 +62,23 @@ public class FXMLDocumentController implements Initializable {
 			"?UseClientEnc=UTF8";
         String user = userPicker.getValue();
         String pwd = passwdTextField.getText();
-        connectToDB(server,user,pwd);
+        
+        if(connectToDB(server,user,pwd)){
+        
+        }else showAlert("Invalid password!");
         
     }
     
-    private void connectToDB(String server, String user, String pwd){
+    private boolean connectToDB(String server, String user, String pwd){
         try {	
 			Class.forName("com.mysql.jdbc.Driver").newInstance();
 			con = DriverManager.getConnection(server, user, pwd);
 			System.out.println("Connected!");
+                        return true;
         }
 		catch(Exception e) {
-			javax.swing.JOptionPane.showMessageDialog(null, 
-				"Database error, " + e.toString());
+                        
+                        return false;
 		}
         finally {
         	try {
@@ -84,5 +90,13 @@ public class FXMLDocumentController implements Initializable {
         	catch(SQLException e) {}
         }
     }
+    
+    private void showAlert(String message){
+        alert.setHeaderText("");
+        alert.setTitle("Alert!");
+        alert.setContentText(message);
+        alert.show();
+    }
+    private final Alert alert = new Alert(Alert.AlertType.INFORMATION);
     
 }
