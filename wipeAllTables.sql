@@ -1,0 +1,6 @@
+DROP TABLE Director;
+DROP TABLE Genre;
+DROP TABLE Album;
+DROP TABLE Artist;
+DROP TABLE Movie;
+DROP TABLE T_User;

@@ -18,6 +18,13 @@ CREATE TABLE Genre(
     PRIMARY KEY (genre)
 );
 
+CREATE TABLE T_User(
+	persNr INT NOT NULL,
+    name VARCHAR(50),
+    PRIMARY KEY(persNr)
+);
+
+
 CREATE TABLE Album(
 	albumId INT NOT NULL,
     name varchar(50) NOT NULL,
@@ -33,7 +40,7 @@ CREATE TABLE Movie(
     title VARCHAR(50) NOT NULL,
     genre VARCHAR(25) NOT NULL,
     length INT,
-    director VARCHAR(50),
+    director int NOT NULL,
     releaseDate DATE NOT NULL,
     PRIMARY KEY(movieId),
     foreign key(genre) REFERENCES Genre(genre),
