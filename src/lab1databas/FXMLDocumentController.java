@@ -5,6 +5,7 @@
  */
 package lab1databas;
 
+import model.UserData;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.Connection;
