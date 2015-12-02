@@ -15,6 +15,8 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ResourceBundle;
 import javafx.application.Platform;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -26,8 +28,10 @@ import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableColumn.CellDataFeatures;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
+import javafx.util.Callback;
 
 /**
  * FXML Controller class
@@ -55,10 +59,7 @@ public class FXMLMainViewController implements Initializable {
     private String user, pwd;
     @FXML
     private TableView table;
-    @FXML
-    private TableColumn c1; 
-    @FXML
-    private TableColumn c2;
+    private ObservableList<Object> data;
     
     /**
      * Initializes the controller class.
@@ -74,7 +75,7 @@ public class FXMLMainViewController implements Initializable {
     }
     
     private boolean connectToDB(String user, String pwd){
-        String database = "Company";
+        String database = "medialibrary";
         String server ="jdbc:mysql://db.christianekenstedt.se:3306/" + database +
 			"?UseClientEnc=UTF8";
         
@@ -82,7 +83,8 @@ public class FXMLMainViewController implements Initializable {
 			Class.forName("com.mysql.jdbc.Driver").newInstance();
 			con = DriverManager.getConnection(server, user, pwd);
 			System.out.println("Connected!");
-                        executeQuery(con, "SELECT * FROM Employee");
+                        //executeQuery(con, "SELECT * FROM Employee");
+                        buildData();
                         return true;
         }
 		catch(Exception e) {
@@ -152,4 +154,60 @@ public class FXMLMainViewController implements Initializable {
 	    	}
 	    }
 	}
+    
+    
+    
+     public void buildData(){
+          
+          data = FXCollections.observableArrayList();
+          try{
+            
+            //SQL FOR SELECTING ALL OF CUSTOMER
+            String SQL = "SELECT * from Album";
+            //ResultSet
+            ResultSet rs = con.createStatement().executeQuery(SQL);
+
+            /**********************************
+             * TABLE COLUMN ADDED DYNAMICALLY *
+             **********************************/
+            for(int i=0 ; i<rs.getMetaData().getColumnCount(); i++){
+                //We are using non property style for making dynamic table
+                final int j = i;                
+                TableColumn col = new TableColumn(rs.getMetaData().getColumnName(i+1));
+                col.setCellValueFactory(new Callback<CellDataFeatures<ObservableList,String>,ObservableValue<String>>(){                    
+                    public ObservableValue<String> call(CellDataFeatures<ObservableList, String> param) {                                                                                              
+                        return new SimpleStringProperty(param.getValue().get(j).toString());                        
+                    }                    
+                });
+               
+                table.getColumns().addAll(col); 
+                System.out.println("Column ["+i+"] ");
+            }
+
+            /********************************
+             * Data added to ObservableList *
+             ********************************/
+            while(rs.next()){
+                //Iterate Row
+                ObservableList<String> row = FXCollections.observableArrayList();
+                for(int i=1 ; i<=rs.getMetaData().getColumnCount(); i++){
+                    //Iterate Column
+                    row.add(rs.getString(i));
+                }
+                System.out.println("Row [1] added "+row );
+                data.add(row);
+
+            }
+
+            //FINALLY ADDED TO TableView
+            table.setItems(data);
+          }catch(Exception e){
+              e.printStackTrace();
+              System.out.println("Error on Building Data");             
+          }
+      }
+    
+    
+    
+    
 }

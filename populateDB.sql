@@ -6,7 +6,10 @@ INSERT INTO Grade(gradeID, name) VALUES(1,'Bad'),(2,'Meh'),(3,'Okey'),(4,'Good')
 
 INSERT INTO Artist(name, nationality) VALUES('Jack Black', 'USA');
 INSERT INTO Artist(name, nationality) VALUES('Pink Floyd', 'USA');
+INSERT INTO Artist(name, nationality) VALUES('The Beatles', 'UK');
 
 INSERT INTO Album(name, releaseDate, genre, grade) VALUES('Dark Side of the Moon', DATE('1973-00-00'), 1, 5);
+INSERT INTO Album(name, releaseDate, genre, grade) VALUES('Sgt. Peppers Lonely Hearts Club Band', DATE('1967-06-01'), 1, 5);
 
 INSERT INTO Album_Artist(album,artist) VALUES (1,2);
+INSERT INTO Album_Artist(album,artist) VALUES (2,3);
