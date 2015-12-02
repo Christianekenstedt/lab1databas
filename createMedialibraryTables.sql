@@ -1,48 +1,55 @@
 USE medialibrary;
 
 CREATE TABLE Artist(
-	artistId INT NOT NULL,
+	artistID INT NOT NULL AUTO_INCREMENT,
     name VARCHAR(50) NOT NULL,
     nationality VARCHAR(25) NOT NULL,
-    primary key(artistId)
-);
-
-CREATE TABLE Director(
-	directorId INT NOT NULL AUTO_INCREMENT,
-    name VARCHAR(50) NOT NULL,
-    PRIMARY KEY(directorId)
+    primary key(artistID)
 );
 
 CREATE TABLE Genre(
-	genre VARCHAR(25) NOT NULL,
-    PRIMARY KEY (genre)
+	genreID INT NOT NULL AUTO_INCREMENT,
+    name VARCHAR(25) NOT NULL,
+    PRIMARY KEY (genreID)
+);
+
+CREATE TABLE Grade(
+	gradeID INT NOT NULL,
+    name VARCHAR(25) NOT NULL,
+    PRIMARY KEY(gradeID)
 );
 
 CREATE TABLE T_User(
-	persNr INT NOT NULL,
+	userID INT NOT NULL AUTO_INCREMENT,
     name VARCHAR(50),
-    PRIMARY KEY(persNr)
+    PRIMARY KEY(userID)
 );
-
 
 CREATE TABLE Album(
-	albumId INT NOT NULL,
+	albumID INT NOT NULL AUTO_INCREMENT,
     name varchar(50) NOT NULL,
-    noTracks INT NOT NULL,
-    artist INT NOT NULL,
     releaseDate date NOT NULL,
-    PRIMARY KEY(albumId),
-    FOREIGN KEY(artist) REFERENCES Artist(artistId)
+    genre INT NOT NULL,
+    grade INT NOT NULL,
+    PRIMARY KEY(albumID),
+    FOREIGN KEY(genre) REFERENCES Genre(genreID),
+    FOREIGN KEY(grade) REFERENCES Grade(gradeID)
 );
 
-CREATE TABLE Movie(
-	movieId INT NOT NULL AUTO_INCREMENT,
-    title VARCHAR(50) NOT NULL,
-    genre VARCHAR(25) NOT NULL,
-    length INT,
-    director int NOT NULL,
-    releaseDate DATE NOT NULL,
-    PRIMARY KEY(movieId),
-    foreign key(genre) REFERENCES Genre(genre),
-    foreign key(director) REFERENCES Director(directorId)
+CREATE TABLE Album_Artist(
+	album INT NOT NULL,
+    artist INT NOT NULL,
+    PRIMARY KEY(album, artist),
+    FOREIGN KEY(album) REFERENCES Album(albumID),
+    FOREIGN KEY(artist) REFERENCES Artist(artistID)
+);
+
+CREATE TABLE Review(
+	reviewID INT NOT NULL AUTO_INCREMENT,
+    text VARCHAR(100),
+    album INT NOT NULL,
+    user INT NOT NULL,
+    PRIMARY KEY(reviewID),
+    FOREIGN KEY(album) REFERENCES Album(albumID),
+    FOREIGN KEY(user) REFERENCES T_User(userID)
 );

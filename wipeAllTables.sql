@@ -1,6 +1,7 @@
-DROP TABLE Director;
-DROP TABLE Genre;
-DROP TABLE Album;
+DROP TABLE Album_Artist;
+DROP TABLE Review;
 DROP TABLE Artist;
-DROP TABLE Movie;
+DROP TABLE Album;
+DROP TABLE Genre;
 DROP TABLE T_User;
+DROP TABLE Grade;

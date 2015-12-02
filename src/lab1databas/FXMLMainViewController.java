@@ -124,8 +124,6 @@ public class FXMLMainViewController implements Initializable {
 	    	// Get the attribute names
 	    	ResultSetMetaData metaData = rs.getMetaData();
 	    	int ccount = metaData.getColumnCount();
-                //c1.setText(metaData.getColumnName(1));
-                //c2.setText(metaData.getColumnName(2));
                 
 	    	for(int c = 1; c <= ccount; c++) {
                         
