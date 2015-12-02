@@ -31,6 +31,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableColumn.CellDataFeatures;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
+import javafx.scene.paint.Color;
 import javafx.util.Callback;
 
 /**
@@ -60,6 +61,12 @@ public class FXMLMainViewController implements Initializable {
     @FXML
     private TableView table;
     private ObservableList<Object> data;
+    @FXML
+    private Label connectedLabel;
+    @FXML
+    private Button showAlbumButton;
+    @FXML
+    private Button showArtistButton;
     
     /**
      * Initializes the controller class.
@@ -74,7 +81,7 @@ public class FXMLMainViewController implements Initializable {
         	closeConnection();
     }
     
-    private boolean connectToDB(String user, String pwd){
+    private boolean connectToDB(String user, String pwd) throws SQLException{
         String database = "medialibrary";
         String server ="jdbc:mysql://db.christianekenstedt.se:3306/" + database +
 			"?UseClientEnc=UTF8";
@@ -84,7 +91,7 @@ public class FXMLMainViewController implements Initializable {
 			con = DriverManager.getConnection(server, user, pwd);
 			System.out.println("Connected!");
                         //executeQuery(con, "SELECT * FROM Employee");
-                        buildData();
+                        
                         return true;
         }
 		catch(Exception e) {
@@ -94,6 +101,13 @@ public class FXMLMainViewController implements Initializable {
                        */ return false;
 		}
         finally {
+            if(con.isValid(1)){
+                connectedLabel.setTextFill(Color.GREEN);
+                connectedLabel.setText("Connected as " + user.toUpperCase() );
+            }else{
+                connectedLabel.setTextFill(Color.RED);
+                connectedLabel.setText("Not connected");
+            }
         	//Maybe something important here.
         }
     }
@@ -113,7 +127,7 @@ public class FXMLMainViewController implements Initializable {
         pwd = data.getPswd();
     }
     
-    public boolean login(){
+    public boolean login() throws SQLException{
         return connectToDB(user,pwd);
     }
     public static void executeQuery(Connection con, String query) throws SQLException {
@@ -156,14 +170,14 @@ public class FXMLMainViewController implements Initializable {
 	}
     
     
-    
-     public void buildData(){
+    // THIS SHOULD 
+     public void buildData(String tableType){
           
           data = FXCollections.observableArrayList();
           try{
             
             //SQL FOR SELECTING ALL OF CUSTOMER
-            String SQL = "SELECT * from Album";
+            String SQL = "SELECT * from "+tableType;
             //ResultSet
             ResultSet rs = con.createStatement().executeQuery(SQL);
 
@@ -193,19 +207,33 @@ public class FXMLMainViewController implements Initializable {
                 for(int i=1 ; i<=rs.getMetaData().getColumnCount(); i++){
                     //Iterate Column
                     row.add(rs.getString(i));
+                    
                 }
-                System.out.println("Row [1] added "+row );
+                System.out.println("Row added "+row );
                 data.add(row);
 
             }
 
             //FINALLY ADDED TO TableView
             table.setItems(data);
+            
           }catch(Exception e){
               e.printStackTrace();
               System.out.println("Error on Building Data");             
           }
       }
+
+    @FXML
+    private void showAlbumButtonHandle(ActionEvent event) {
+        table.getColumns().clear();
+        buildData("Album");
+    }
+
+    @FXML
+    private void showArtistButtonHandle(ActionEvent event) {
+        table.getColumns().clear();
+        buildData("Artist");
+    }
     
     
     

@@ -69,17 +69,17 @@ public class FXMLDocumentController implements Initializable {
     }
 
     @FXML
-    private void handlePasswdInput(ActionEvent event) throws IOException {
+    private void handlePasswdInput(ActionEvent event) throws IOException, SQLException {
         handleLogin(event);
         
     }
     @FXML
-    private void handleLoginButton(ActionEvent event) throws IOException {
+    private void handleLoginButton(ActionEvent event) throws IOException, SQLException {
         handleLogin(event);
     }
     
     
-   private void handleLogin(ActionEvent event) throws IOException{
+   private void handleLogin(ActionEvent event) throws IOException, SQLException{
        
         String user = userPicker.getValue();
         String pwd = passwdTextField.getText();
