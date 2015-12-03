@@ -12,10 +12,12 @@ INSERT INTO Artist(name, nationality) VALUES('Led Zeppelin', 'UK');
 INSERT INTO Album(name, releaseDate, genre, grade) VALUES('Dark Side of the Moon', DATE('1973-00-00'), 1, 5);
 INSERT INTO Album(name, releaseDate, genre, grade) VALUES('Sgt. Peppers Lonely Hearts Club Band', DATE('1967-06-01'), 1, 5);
 INSERT INTO Album(name, releaseDate, genre, grade) VALUES('Led Zeppelin IV', DATE('1967-06-01'), 1, 5);
+INSERT INTO Album(name, releaseDate, genre, grade) VALUES('The Pick of Destiny', DATE('2006-11-14'), 1, 5);
 
 INSERT INTO Album_Artist(album,artist) VALUES (1,2);
 INSERT INTO Album_Artist(album,artist) VALUES (2,3);
 INSERT INTO Album_Artist(album,artist) VALUES (3,4);
+INSERT INTO Album_Artist(album,artist) VALUES (4,1);
 
 /*ADD USERS*/
 INSERT INTO T_User(name) VALUES('Christian'),('Gustaf'),('Kalle'),('Lisa');
