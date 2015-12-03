@@ -9,10 +9,12 @@ import model.UserData;
 import java.net.URL;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
 import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
@@ -22,6 +24,7 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import static javafx.print.PrintColor.COLOR;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Menu;
@@ -31,8 +34,10 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableColumn.CellDataFeatures;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
 import javafx.scene.paint.Color;
 import javafx.util.Callback;
+import model.Artist;
 
 /**
  * FXML Controller class
@@ -67,6 +72,12 @@ public class FXMLMainViewController implements Initializable {
     private Button showAlbumButton;
     @FXML
     private Button showArtistButton;
+    @FXML
+    private TextField searchField;
+    @FXML
+    private Button searchButn;
+    @FXML
+    private Label tempLabel;
     
     /**
      * Initializes the controller class.
@@ -168,7 +179,24 @@ public class FXMLMainViewController implements Initializable {
 	    	}
 	    }
 	}
-    
+    // TEST MED PREPARED STATEMENTS OCH ATT GÖRA OM OBJEKT FRÅN DBn.
+    public ArrayList<Artist> getArtistByName(String name) throws SQLException{
+        ResultSet rs = null;
+        PreparedStatement artistByName = con.prepareStatement("SELECT * FROM Artist WHERE name = ?");
+        try{
+            artistByName.clearParameters();
+            artistByName.setString(1,name);
+            rs = artistByName.executeQuery();
+            ArrayList<Artist> list = new ArrayList<Artist>();
+            while(rs.next()){
+                Artist artist = new Artist(rs.getInt(1), rs.getString(2),rs.getString(3));
+                list.add(artist);
+            }
+            return list;
+        }finally{
+            rs.close();
+        }
+    }
     
     // THIS SHOULD 
      public void buildData(String tableType){
@@ -178,6 +206,7 @@ public class FXMLMainViewController implements Initializable {
             
             //SQL FOR SELECTING ALL OF CUSTOMER
             String SQL = "SELECT * from "+tableType;
+            //String SQL = "SELECT Album.name, Artist.name, Album.releaseDate FROM Album, Album_Artist, Artist where Album.albumID = Album_Artist.album and Album_Artist.artist = Artist.artistID";
             //ResultSet
             ResultSet rs = con.createStatement().executeQuery(SQL);
 
@@ -233,6 +262,22 @@ public class FXMLMainViewController implements Initializable {
     private void showArtistButtonHandle(ActionEvent event) {
         table.getColumns().clear();
         buildData("Artist");
+    }
+
+    @FXML
+    private void handleSearchButn(ActionEvent event) throws SQLException {
+        if(!searchField.getText().isEmpty()){
+            
+            ArrayList<Artist> list = new ArrayList<>();
+            list = getArtistByName(searchField.getText());
+            
+            //System.out.println(list.toString());
+            for(int i = 0; i < list.size(); i++){
+                System.out.println("["+list.get(i).getArtistID()+"] Name: "+list.get(i).getName() +"\tNationality: "+ list.get(i).getNationality());
+            }
+            tempLabel.setTextFill(Color.RED);
+            tempLabel.setText("OBS! OUTPUT I KONSOL!");
+        }
     }
     
     

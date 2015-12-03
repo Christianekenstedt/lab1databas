@@ -94,7 +94,9 @@ public class FXMLDocumentController implements Initializable {
             c.initUserInput(data);
             if(c.login()){
                 mainStage.setScene(mainScene);
+                
                 mainStage.hide();
+                mainStage.setTitle("Media Library");
                 mainStage.show();
             }else showAlert("Invalid password!");
         }else showAlert("No user selected!");
