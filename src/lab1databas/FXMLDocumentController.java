@@ -18,6 +18,7 @@ import java.util.logging.Logger;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -30,6 +31,7 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 
 /**
  *
@@ -97,6 +99,13 @@ public class FXMLDocumentController implements Initializable {
                 
                 mainStage.hide();
                 mainStage.setTitle("Media Library");
+                mainStage.setOnCloseRequest((WindowEvent event1) -> {
+                    try {
+                        c.closeConnection();
+                    } catch (SQLException ex) {
+                        Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                });
                 mainStage.show();
             }else showAlert("Invalid password!");
         }else showAlert("No user selected!");

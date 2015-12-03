@@ -14,6 +14,7 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
@@ -28,6 +29,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import static javafx.print.PrintColor.COLOR;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
@@ -37,8 +39,10 @@ import javafx.scene.control.TableColumn.CellDataFeatures;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.paint.Color;
 import javafx.util.Callback;
+import model.Album;
 import model.Artist;
 
 /**
@@ -67,8 +71,6 @@ public class FXMLMainViewController implements Initializable {
     private String user, pwd;
     @FXML
     private TableView<Object> table;
-    
-    
     @FXML
     private Label connectedLabel;
     @FXML
@@ -81,6 +83,9 @@ public class FXMLMainViewController implements Initializable {
     private Button searchButn;
     @FXML
     private Label tempLabel;
+    @FXML
+    private ComboBox<String> searchComboBox;
+    
     
     /**
      * Initializes the controller class.
@@ -88,24 +93,155 @@ public class FXMLMainViewController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
+        String choiceOne = "Get Album by Title", choiceTwo = "Get Album by Artist";
+        ObservableList<String> choices = FXCollections.observableArrayList(choiceOne, choiceTwo);
+        searchComboBox.getItems().addAll(choices);
+        searchComboBox.getSelectionModel().select("Get Album by Title");
+        searchField.setPromptText("Type here");
+        
     }    
-
+    
     @FXML
     private void disconnectButtonHandle(ActionEvent event) throws SQLException {
         	closeConnection();
     }
     
+    @FXML
+    private void showAlbumButtonHandle(ActionEvent event) {
+        table.getColumns().clear();
+        buildData("Album");
+    }
+
+    @FXML
+    private void showArtistButtonHandle(ActionEvent event) {
+        table.getColumns().clear();
+        buildData("Artist");
+    }
+
+    @FXML
+    private void handleSearchButn(ActionEvent event) throws SQLException {
+        if(!searchField.getText().isEmpty()){
+            if(searchComboBox.getValue().equals("Get Album by Title")){
+                
+                new Thread(){
+                    public void run() {
+                        try {
+                            ArrayList<Object> list = getAlbumByTitle(searchField.getText());
+                            javafx.application.Platform.runLater(new Runnable(){
+                                @Override
+                                public void run() {
+                                    updateUI(list);
+                                }
+                            });
+                        } catch (SQLException ex) {
+                            Logger.getLogger(FXMLMainViewController.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                    }
+                }.start();
+            }else if(searchComboBox.getValue().equals("Get Album by Artist")){
+                //updateUI(getAlbumByTitle(searchField.getText()));
+                
+            }
+             
+        }
+    }
+    
+    public void initUserInput(UserData data){
+        user = data.getUsername();
+        pwd = data.getPswd();
+    }
+    
+    public void updateUI(ArrayList<Object> inputList){
+        ObservableList<Object> list =  FXCollections.observableArrayList(inputList);
+        
+            table.getColumns().clear();
+            TableColumn<Object, Integer> cID = new TableColumn<>("AlbumID");
+            cID.setCellValueFactory(new PropertyValueFactory("albumID"));
+            TableColumn<Object, String> cName = new TableColumn<>("Title");
+            cName.setCellValueFactory(new PropertyValueFactory("name"));
+            TableColumn<Object, LocalDate> cDate = new TableColumn<>("Release Date");
+            cDate.setCellValueFactory(new PropertyValueFactory("releaseDate"));
+            table.getColumns().addAll(cID,cName,cDate);
+            table.setItems(list);
+    }
+    
+    private ArrayList<Object> getAlbumByTitle(String name) throws SQLException{
+        ResultSet rs = null;
+        PreparedStatement albumByName = con.prepareStatement("SELECT * FROM Album WHERE name LIKE ?");
+        try{
+            albumByName.clearParameters();
+            albumByName.setString(1,name + "%");
+            
+            rs = albumByName.executeQuery();
+            ArrayList<Object> list = new ArrayList<>();
+            while(rs.next()){
+                Album album = new Album(rs.getInt(1), rs.getString(2),rs.getDate(3));
+                list.add(album);
+            }
+            return list;
+        }finally{
+            rs.close();
+        }
+    }
+    
+    private ArrayList<Object> getAlbumsByArtist(String name) throws SQLException{
+        ResultSet rs = null;
+        PreparedStatement albumByArtist = con.prepareStatement("SELECT Album.name, Artist.name FROM Album, Album_Artist, Artist WHERE Album.albumID = "
+                + "Album_Artist.album and Album_Artist.artist = Artist.artistID AND Artist.name = ?");
+        try{
+            albumByArtist.clearParameters();
+            albumByArtist.setString(1,name + "%");
+            
+            rs = albumByArtist.executeQuery();
+            ArrayList<Object> list = new ArrayList<>();
+            while(rs.next()){
+                Album album = new Album(rs.getInt(1), rs.getString(2),rs.getDate(3));
+                list.add(album);
+            }
+            return list;
+        }finally{
+            rs.close();
+        }
+    }
+    /*
+       _____                            _   _               __  __      _   _               _     
+      / ____|                          | | (_)             |  \/  |    | | | |             | |    
+     | |     ___  _ __  _ __   ___  ___| |_ _  ___  _ __   | \  / | ___| |_| |__   ___   __| |___ 
+     | |    / _ \| '_ \| '_ \ / _ \/ __| __| |/ _ \| '_ \  | |\/| |/ _ \ __| '_ \ / _ \ / _` / __|
+     | |___| (_) | | | | | | |  __/ (__| |_| | (_) | | | | | |  | |  __/ |_| | | | (_) | (_| \__ \
+      \_____\___/|_| |_|_| |_|\___|\___|\__|_|\___/|_| |_| |_|  |_|\___|\__|_| |_|\___/ \__,_|___/
+    
+    */
+    public boolean login() throws SQLException{
+        return connectToDB(user,pwd);
+    }
+    
+    public void closeConnection() throws SQLException{
+        try {
+        		if(con != null) {
+        			con.close();
+        			System.out.println("Connection closed.");
+                                Platform.exit();
+                        }
+        } catch(SQLException e) {}
+    }
+    /*
+      _____      _            _         __  __      _   _               _     
+     |  __ \    (_)          | |       |  \/  |    | | | |             | |    
+     | |__) | __ ___   ____ _| |_ ___  | \  / | ___| |_| |__   ___   __| |___ 
+     |  ___/ '__| \ \ / / _` | __/ _ \ | |\/| |/ _ \ __| '_ \ / _ \ / _` / __|
+     | |   | |  | |\ V / (_| | ||  __/ | |  | |  __/ |_| | | | (_) | (_| \__ \
+     |_|   |_|  |_| \_/ \__,_|\__\___| |_|  |_|\___|\__|_| |_|\___/ \__,_|___/
+    
+    */
     private boolean connectToDB(String user, String pwd) throws SQLException{
         String database = "medialibrary";
         String server ="jdbc:mysql://db.christianekenstedt.se:3306/" + database +
 			"?UseClientEnc=UTF8";
-        
         try {	
 			Class.forName("com.mysql.jdbc.Driver").newInstance();
 			con = DriverManager.getConnection(server, user, pwd);
 			System.out.println("Connected!");
-                        //executeQuery(con, "SELECT * FROM Employee");
-                        
                         return true;
         }
 		catch(Exception e) {
@@ -126,24 +262,15 @@ public class FXMLMainViewController implements Initializable {
         }
     }
     
-    public void closeConnection() throws SQLException{
-        try {
-        		if(con != null) {
-        			con.close();
-        			System.out.println("Connection closed.");
-                                Platform.exit();
-                        }
-        } catch(SQLException e) {}
-    }
+    /*
+      _______ ______ __  __ _____   _____ 
+     |__   __|  ____|  \/  |  __ \ / ____|
+        | |  | |__  | \  / | |__) | (___  
+        | |  |  __| | |\/| |  ___/ \___ \ 
+        | |  | |____| |  | | |     ____) |
+        |_|  |______|_|  |_|_|    |_____/ 
+    */
     
-    public void initUserInput(UserData data){
-        user = data.getUsername();
-        pwd = data.getPswd();
-    }
-    
-    public boolean login() throws SQLException{
-        return connectToDB(user,pwd);
-    }
     public static void executeQuery(Connection con, String query) throws SQLException {
             new Thread(){
                 @Override
@@ -248,39 +375,4 @@ public class FXMLMainViewController implements Initializable {
               System.out.println("Error on Building Data");             
           }
       }
-
-    @FXML
-    private void showAlbumButtonHandle(ActionEvent event) {
-        table.getColumns().clear();
-        buildData("Album");
-    }
-
-    @FXML
-    private void showArtistButtonHandle(ActionEvent event) {
-        table.getColumns().clear();
-        buildData("Artist");
-    }
-
-    @FXML
-    private void handleSearchButn(ActionEvent event) throws SQLException {
-        if(!searchField.getText().isEmpty()){
-            
-            ObservableList<Object> list = FXCollections.observableArrayList(getArtistByName(searchField.getText()));
-            
-            
-            //System.out.println(list.toString());
-            for(int i = 0; i < list.size(); i++){
-                System.out.println("["+((Artist)list.get(i)).getArtistID()+"] Name: "+((Artist)list.get(i)).getName() +"\tNationality: "+ ((Artist)list.get(i)).getNationality());
-            }
-                       
-            tempLabel.setTextFill(Color.RED);
-            tempLabel.setText("OBS! OUTPUT I KONSOL!");
-            
-        }
-    }
-    
-    public void updateUI(ArrayList<Object> list){
-        
-    }
-    
 }
