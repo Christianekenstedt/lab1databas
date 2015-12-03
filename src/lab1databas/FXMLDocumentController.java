@@ -85,7 +85,7 @@ public class FXMLDocumentController implements Initializable {
         String pwd = passwdTextField.getText();
         if(userPicker.getValue() != null){
             UserData data = new UserData(user,pwd);
-            loader = new FXMLLoader(getClass().getResource("FXMLMainView.fxml"));
+            loader = new FXMLLoader(getClass().getResource("/FXMLView/FXMLMainView.fxml"));
             mainParent = loader.load();
             
             Scene mainScene = new Scene(mainParent);

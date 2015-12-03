@@ -272,20 +272,15 @@ public class FXMLMainViewController implements Initializable {
             for(int i = 0; i < list.size(); i++){
                 System.out.println("["+((Artist)list.get(i)).getArtistID()+"] Name: "+((Artist)list.get(i)).getName() +"\tNationality: "+ ((Artist)list.get(i)).getNationality());
             }
-            table.getColumns().clear();
-            
-            table.getColumns().addAll(new TableColumn("ArtistId"),new TableColumn("Name"),new TableColumn("Nationality"));
-            
-            table.setItems(list);
-            
+                       
             tempLabel.setTextFill(Color.RED);
             tempLabel.setText("OBS! OUTPUT I KONSOL!");
+            
         }
     }
     
-    private void presentTableWithList(ArrayList<Object> list){
-        // VET EJ :O
+    public void updateUI(ArrayList<Object> list){
+        
     }
-    
     
 }

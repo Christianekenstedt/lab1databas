@@ -19,7 +19,7 @@ public class Lab1databas extends Application {
     
     @Override
     public void start(Stage stage) throws Exception {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("FXMLDocument.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/FXMLView/FXMLDocument.fxml"));
         Parent root = (Parent)loader.load();
         
         Scene scene = new Scene(root);
