@@ -345,7 +345,7 @@ public class FXMLMainViewController implements Initializable {
           
           ObservableList<Object> data;data = FXCollections.observableArrayList();
           try{
-            String SQL = "SELECT * from "+tableType;
+            String SQL = "SELECT * from " + tableType;
             
             ResultSet rs = con.createStatement().executeQuery(SQL);
             for(int i=0 ; i<rs.getMetaData().getColumnCount(); i++){ // Gets the number of columns dynamically
