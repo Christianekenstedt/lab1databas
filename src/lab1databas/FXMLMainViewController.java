@@ -195,10 +195,11 @@ public class FXMLMainViewController implements Initializable {
     // TEST MED PREPARED STATEMENTS OCH ATT GÖRA OM OBJEKT FRÅN DBn.
     public ArrayList<Artist> getArtistByName(String name) throws SQLException{
         ResultSet rs = null;
-        PreparedStatement artistByName = con.prepareStatement("SELECT * FROM Artist WHERE name = ?");
+        PreparedStatement artistByName = con.prepareStatement("SELECT * FROM Artist WHERE name LIKE ?");
         try{
             artistByName.clearParameters();
-            artistByName.setString(1,name);
+            artistByName.setString(1,name + "%");
+            
             rs = artistByName.executeQuery();
             ArrayList<Artist> list = new ArrayList<Artist>();
             while(rs.next()){
