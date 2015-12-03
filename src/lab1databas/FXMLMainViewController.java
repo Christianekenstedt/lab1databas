@@ -66,8 +66,9 @@ public class FXMLMainViewController implements Initializable {
     private Connection con = null;
     private String user, pwd;
     @FXML
-    private TableView table;
-    private ObservableList<Object> data;
+    private TableView<Object> table;
+    
+    
     @FXML
     private Label connectedLabel;
     @FXML
@@ -200,7 +201,7 @@ public class FXMLMainViewController implements Initializable {
             artistByName.clearParameters();
             artistByName.setString(1,name);
             rs = artistByName.executeQuery();
-            ArrayList<Artist> list = new ArrayList<Artist>();
+            ArrayList<Artist> list = new ArrayList<>();
             while(rs.next()){
                 Artist artist = new Artist(rs.getInt(1), rs.getString(2),rs.getString(3));
                 list.add(artist);
@@ -214,7 +215,7 @@ public class FXMLMainViewController implements Initializable {
     // THIS SHOULD 
      public void buildData(String tableType){
           
-          data = FXCollections.observableArrayList();
+          ObservableList<Object> data;data = FXCollections.observableArrayList();
           try{
             String SQL = "SELECT * from "+tableType;
             
@@ -263,13 +264,19 @@ public class FXMLMainViewController implements Initializable {
     private void handleSearchButn(ActionEvent event) throws SQLException {
         if(!searchField.getText().isEmpty()){
             
-            ArrayList<Artist> list = new ArrayList<>();
-            list = getArtistByName(searchField.getText());
+            ObservableList<Object> list = FXCollections.observableArrayList(getArtistByName(searchField.getText()));
+            
             
             //System.out.println(list.toString());
             for(int i = 0; i < list.size(); i++){
-                System.out.println("["+list.get(i).getArtistID()+"] Name: "+list.get(i).getName() +"\tNationality: "+ list.get(i).getNationality());
+                System.out.println("["+((Artist)list.get(i)).getArtistID()+"] Name: "+((Artist)list.get(i)).getName() +"\tNationality: "+ ((Artist)list.get(i)).getNationality());
             }
+            table.getColumns().clear();
+            
+            table.getColumns().addAll(new TableColumn("ArtistId"),new TableColumn("Name"),new TableColumn("Nationality"));
+            
+            table.setItems(list);
+            
             tempLabel.setTextFill(Color.RED);
             tempLabel.setText("OBS! OUTPUT I KONSOL!");
         }
