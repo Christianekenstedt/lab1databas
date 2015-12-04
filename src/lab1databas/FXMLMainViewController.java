@@ -267,7 +267,7 @@ public class FXMLMainViewController implements Initializable {
 
     @FXML
     private void addHandle(ActionEvent event) throws IOException {
-        Parent root = FXMLLoader.load(getClass().getResource("/FXMLView/AddView.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("/FXMLView/FXMLAddView.fxml"));
         Stage stage = new Stage();
         Scene scene = new Scene(root);
         stage.setScene(scene);
