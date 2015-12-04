@@ -29,7 +29,9 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.fxml.JavaFXBuilderFactory;
 import static javafx.print.PrintColor.COLOR;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -150,14 +152,15 @@ public class FXMLMainViewController implements Initializable {
     }
     
     @FXML
-    private void addAlbumHandle(ActionEvent event) throws IOException {
-        Parent root = FXMLLoader.load(getClass().getResource("FXMLAddView.fxml"));
+    public void addAlbumHandle(ActionEvent event) throws IOException {
+        
+        Parent root = FXMLLoader.load(getClass().getResource("/FXMLView/FXMLAddView.fxml"));
         Stage stage = new Stage();
         Scene scene = new Scene(root);
         stage.setScene(scene);
         stage.setTitle("Add Album");
         stage.showAndWait();
-    }
+        }
     
     public void initUserInput(UserData data){
         user = data.getUsername();

@@ -53,37 +53,9 @@ public class AddViewController implements Initializable {
         // TODO
     }    
 
-   /* @FXML
+    @FXML
     private void addButtonHandle(ActionEvent event) throws SQLException{
-        new Thread(){
-            @Override
-            public void run(){
-                try {
-                    ArrayList<Grade> list = getGrades();
-                    gradeComboBox.setItems(FXCollections.observableList(list));
-                } catch (SQLException ex) {
-                    Logger.getLogger(AddViewController.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            }
-        };
-    }*/
-    /*
-    private ArrayList<Grade> getGrades() throws SQLException{
-        ResultSet rs = null;
-        PreparedStatement gradesPreStatement = con.prepareStatement("SELECT * FROM Grade");
-        try{
-            gradesPreStatement.clearParameters();
-            
-            rs = gradesPreStatement.executeQuery();
-            ArrayList<Grade> list = new ArrayList<>();
-            while(rs.next()){
-                Grade grade = new Grade(rs.getInt(1), rs.getString(2));
-                list.add(grade);
-            }
-            return list;
-        }finally{
-            rs.close();
-        }    
-    }*/
-    
+        
+    }
+  
 }
