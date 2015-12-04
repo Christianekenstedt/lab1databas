@@ -14,7 +14,7 @@
         <menus>
           <Menu fx:id="fileMenu" mnemonicParsing="false" text="File">
             <items>
-              <MenuItem fx:id="addMenuItem" mnemonicParsing="false" onAction="#addHandle" text="Add Album" />
+                  <MenuItem fx:id="addAlbumMenuItem" mnemonicParsing="false" onAction="#addAlbumHandle" text="Add Album" />
                   <MenuItem fx:id="closeMenuItem1" mnemonicParsing="false" text="Close" />
             </items>
           </Menu>
