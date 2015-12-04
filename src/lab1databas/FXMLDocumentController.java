@@ -5,20 +5,15 @@
  */
 package lab1databas;
 
-import model.UserData;
 import java.io.IOException;
 import java.net.URL;
-import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.util.Enumeration;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -32,6 +27,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
+import model.ConnectionToDb;
 
 /**
  *
@@ -86,22 +82,21 @@ public class FXMLDocumentController implements Initializable {
         String user = userPicker.getValue();
         String pwd = passwdTextField.getText();
         if(userPicker.getValue() != null){
-            UserData data = new UserData(user,pwd);
+            ConnectionToDb connection= new ConnectionToDb("db.christianekenstedt.se", "medialibrary", user, pwd);
             loader = new FXMLLoader(getClass().getResource("/FXMLView/FXMLMainView.fxml"));
             mainParent = loader.load();
             
             Scene mainScene = new Scene(mainParent);
             Stage mainStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             FXMLMainViewController c = loader.getController();
-            c.initUserInput(data);
-            if(c.login()){
+            c.initConnection(connection);
+            if(connection.connectToDatabase()){
                 mainStage.setScene(mainScene);
-                
                 mainStage.hide();
                 mainStage.setTitle("Media Library");
                 mainStage.setOnCloseRequest((WindowEvent event1) -> {
                     try {
-                        c.closeConnection();
+                        connection.closeConnection();
                     } catch (SQLException ex) {
                         Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
                     }
@@ -118,9 +113,5 @@ public class FXMLDocumentController implements Initializable {
         alert.show();
     }
     private final Alert alert = new Alert(Alert.AlertType.INFORMATION);
-    
-    
-    
-    
     
 }

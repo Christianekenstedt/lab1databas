@@ -10,6 +10,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import static java.util.Collections.list;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -22,6 +23,7 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextField;
 import model.Album;
+import model.ConnectionToDb;
 import model.Genre;
 import model.Grade;
 
@@ -44,18 +46,36 @@ public class AddViewController implements Initializable {
     private ComboBox<Grade> gradeComboBox;
     @FXML
     private Button addButton;
+    
+    private ConnectionToDb connection;
 
     /**
      * Initializes the controller class.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // TODO
+        
     }    
 
     @FXML
     private void addButtonHandle(ActionEvent event) throws SQLException{
         
     }
-  
+    
+    public void initData(ConnectionToDb connection){
+        this.connection = connection;
+    }
+    
+    public void updateComboBoxes(){// Lägg till för grade också
+        try {
+            // TODO
+            
+            
+            
+            genreComboBox.setItems(FXCollections.observableArrayList(connection.getGenre()));
+        } catch (SQLException ex) {
+            Logger.getLogger(AddViewController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
 }

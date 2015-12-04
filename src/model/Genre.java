@@ -105,7 +105,7 @@ public class Genre implements Serializable {
 
     @Override
     public String toString() {
-        return "model.Genre[ genreID=" + genreID + " ]";
+        return getName();
     }
     
 }
