@@ -6,9 +6,13 @@
 package lab1databas;
 
 import java.net.URL;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import static java.util.Collections.list;
 import java.util.ResourceBundle;
@@ -48,6 +52,8 @@ public class AddViewController implements Initializable {
     private Button addButton;
     
     private ConnectionToDb connection;
+    @FXML
+    private TextField nationalityTextField;
 
     /**
      * Initializes the controller class.
@@ -59,7 +65,21 @@ public class AddViewController implements Initializable {
 
     @FXML
     private void addButtonHandle(ActionEvent event) throws SQLException{
+        String title = titleTextField.getText();
+        String artist = artistTextField.getText();
+        LocalDate date = datePicker.getValue();
+        Genre genre = genreComboBox.getValue();
+        Grade grade = gradeComboBox.getValue();
+        String nationality = nationalityTextField.getText();
         
+        if(title.length()>0 && artist.length() > 0 && genre.getGenreID() != null && grade.getGradeID() != null){
+            Date d = Date.valueOf(date);
+            connection.addAlbum(title, artist, nationality, d, genre, grade);
+        }else{
+            System.out.println("Fill all the fields!");
+        }
+        
+    
     }
     
     public void initData(ConnectionToDb connection){
@@ -69,13 +89,12 @@ public class AddViewController implements Initializable {
     public void updateComboBoxes(){// Lägg till för grade också
         try {
             // TODO
-            
-            
-            
             genreComboBox.setItems(FXCollections.observableArrayList(connection.getGenre()));
+            gradeComboBox.setItems(FXCollections.observableArrayList(connection.getGrades()));
         } catch (SQLException ex) {
             Logger.getLogger(AddViewController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+    
     
 }

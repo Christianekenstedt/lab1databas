@@ -102,7 +102,7 @@ public class Grade implements Serializable {
 
     @Override
     public String toString() {
-        return "model.Grade[ gradeID=" + gradeID + " ]";
+        return getName();
     }
     
 }

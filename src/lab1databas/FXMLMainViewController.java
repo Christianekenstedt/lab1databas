@@ -30,6 +30,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.paint.Color;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import model.ConnectionToDb;
 
@@ -132,6 +133,7 @@ public class FXMLMainViewController implements Initializable {
         Scene scene = new Scene(root);
         stage.setScene(scene);
         stage.setTitle("Add Album");
+        stage.initModality(Modality.APPLICATION_MODAL);
         stage.showAndWait();
         }
     

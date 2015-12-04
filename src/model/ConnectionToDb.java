@@ -2,10 +2,14 @@ package model;
 
 import java.sql.DriverManager;
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
+
 import java.util.ArrayList;
+
 import javafx.application.Platform;
 
 /**
@@ -54,6 +58,28 @@ public class ConnectionToDb {
             Platform.exit();
         }
     }
+    
+    public void addAlbum(String title, String artist, String nationality, Date date, Genre genre, Grade grade) throws SQLException{
+        
+        PreparedStatement addAlbumPrepSt = con.prepareStatement("INSERT INTO Album(name, releaseDate, genre, grade) VALUES(?, ?, ?, ?)");
+        PreparedStatement addArtistPrepSt = con.prepareStatement("INSERT INTO Artist(name, nationality) VALUES(?, ?)");
+        //PreparedStatement addArtistToAlbumSt = con.prepareStatement("INSERT INTO Album_Artist(album,artist) VALUES (?,?)");
+        
+        try{
+            addAlbumPrepSt.clearParameters();
+            addArtistPrepSt.clearParameters();
+            //addArtistToAlbumSt.clearParameters();
+            addAlbumPrepSt.setString(1, title); addAlbumPrepSt.setDate(2, date); addAlbumPrepSt.setInt(3, genre.getGenreID()); addAlbumPrepSt.setInt(4, grade.getGradeID());
+            addArtistPrepSt.setString(1, artist); addArtistPrepSt.setString(2, nationality);
+            addAlbumPrepSt.execute();
+            addArtistPrepSt.execute();
+        }finally{
+            
+        }
+    
+    }
+    
+    
     
     public ArrayList<Object> getAlbumsByArtist(String name) throws SQLException{
         ResultSet rs = null;
@@ -114,7 +140,7 @@ public class ConnectionToDb {
     
     public ArrayList<Grade> getGrades() throws SQLException{
         ResultSet rs = null;
-        PreparedStatement gradesPreStatement = con.prepareStatement("SELECT * FROM Genre");
+        PreparedStatement gradesPreStatement = con.prepareStatement("SELECT * FROM Grade");
         try{
             gradesPreStatement.clearParameters();
             
