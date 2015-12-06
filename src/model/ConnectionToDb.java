@@ -60,7 +60,7 @@ public class ConnectionToDb implements DBCommunication{
                      return false;
 		}
         finally {
-            
+                
         	//Maybe something important here.
         }
     }

@@ -25,6 +25,7 @@ public class Lab1databas extends Application {
         
         Scene scene = new Scene(root);
         stage.setScene(scene);
+        stage.setResizable(false);
         stage.getIcons().add(new Image("resources/playIcon.png"));
         stage.setTitle("Media Library Login");
         stage.show();

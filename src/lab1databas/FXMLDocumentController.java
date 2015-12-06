@@ -114,6 +114,8 @@ public class FXMLDocumentController implements Initializable {
     private void showAlert(String message){
         alert.setHeaderText("");
         alert.setTitle("Alert!");
+        alert.setAlertType(Alert.AlertType.INFORMATION);
+        ((Stage)alert.getDialogPane().getScene().getWindow()).getIcons().add(new Image("resources/playIcon.png"));
         alert.setContentText(message);
         alert.show();
     }
