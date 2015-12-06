@@ -25,6 +25,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import model.ConnectionToDb;
@@ -96,6 +97,7 @@ public class FXMLDocumentController implements Initializable {
             if(connection.connectToDatabase()){
                 mainStage.setScene(mainScene);
                 mainStage.hide();
+                mainStage.getIcons().add(new Image("resources/playIcon.png"));
                 mainStage.setTitle("Media Library");
                 mainStage.setOnCloseRequest((WindowEvent event1) -> {
                     try {
