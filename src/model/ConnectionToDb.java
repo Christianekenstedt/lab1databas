@@ -64,18 +64,61 @@ public class ConnectionToDb implements DBCommunication{
         
         PreparedStatement addAlbumPrepSt = con.prepareStatement("INSERT INTO Album(name, releaseDate, genre, grade) VALUES(?, ?, ?, ?)");
         PreparedStatement addArtistPrepSt = con.prepareStatement("INSERT INTO Artist(name, nationality) VALUES(?, ?)");
-        //PreparedStatement addArtistToAlbumSt = con.prepareStatement("INSERT INTO Album_Artist(album,artist) VALUES (?,?)");
+        PreparedStatement checkIfArtistExists = con.prepareStatement("SELECT artistID from Artist where name = ? and nationality = ?");
+        PreparedStatement getAlbumID = con.prepareStatement("SELECT albumID from Album where name = ?");
+                
+        PreparedStatement addArtistToAlbumSt = con.prepareStatement("INSERT INTO Album_Artist(album,artist) VALUES (?,?)");
         
         try{
+            int artistID;
+            int albumID;
+            con.setAutoCommit(false);
             addAlbumPrepSt.clearParameters();
             addArtistPrepSt.clearParameters();
-            //addArtistToAlbumSt.clearParameters();
-            addAlbumPrepSt.setString(1, title); addAlbumPrepSt.setDate(2, date); addAlbumPrepSt.setInt(3, genre.getGenreID()); addAlbumPrepSt.setInt(4, grade.getGradeID());
-            addArtistPrepSt.setString(1, artist); addArtistPrepSt.setString(2, nationality);
-            addAlbumPrepSt.execute();
-            addArtistPrepSt.execute();
-        }finally{
+            checkIfArtistExists.clearParameters();
+            getAlbumID.clearParameters();
+            addArtistToAlbumSt.clearParameters();
             
+            checkIfArtistExists.setString(1, artist);
+            checkIfArtistExists.setString(2, nationality);
+            ResultSet rs = checkIfArtistExists.executeQuery();
+            
+            addAlbumPrepSt.setString(1, title); addAlbumPrepSt.setDate(2, date); addAlbumPrepSt.setInt(3, genre.getGenreID()); addAlbumPrepSt.setInt(4, grade.getGradeID());
+            addAlbumPrepSt.execute();
+            
+            getAlbumID.setString(1, title);
+            ResultSet rsAlbumID = getAlbumID.executeQuery();
+            if(rsAlbumID.next()){
+              albumID = rsAlbumID.getInt(1);
+            if ( !rs.next() ){
+                addArtistPrepSt.setString(1, artist); addArtistPrepSt.setString(2, nationality);
+                addArtistPrepSt.execute();
+                rs = checkIfArtistExists.executeQuery();
+                if(rs.next()){
+                   artistID = rs.getInt(1); 
+                }else{
+                    artistID = -1;
+                }
+            }else{
+                artistID = rs.getInt(1);
+            }
+            
+            addArtistToAlbumSt.setInt(1,albumID);
+            addArtistToAlbumSt.setInt(2,artistID);
+                
+            addArtistToAlbumSt.execute();
+            
+            }
+            
+            
+            con.commit();
+            
+        }catch(SQLException e){
+            if (con != null) con.rollback();
+            System.err.print("Transaction rollback");
+            throw e;
+        }finally{
+            con.setAutoCommit(true);
         }
     
     }
@@ -85,7 +128,7 @@ public class ConnectionToDb implements DBCommunication{
     @Override
     public ArrayList<Object> getAlbumsByArtist(String name) throws SQLException{
         ResultSet rs = null;
-        PreparedStatement albumByArtist = con.prepareStatement("SELECT Album.name, Artist.name FROM Album, Album_Artist, Artist WHERE Album.albumID = "
+        PreparedStatement albumByArtist = con.prepareStatement("SELECT Album.* FROM Album, Album_Artist, Artist WHERE Album.albumID = "
                 + "Album_Artist.album and Album_Artist.artist = Artist.artistID AND Artist.name = ?");
         try{
             albumByArtist.clearParameters();
@@ -95,6 +138,7 @@ public class ConnectionToDb implements DBCommunication{
             ArrayList<Object> list = new ArrayList<>();
             while(rs.next()){
                 Album album = new Album(rs.getInt(1), rs.getString(2),rs.getDate(3));
+                System.out.println(album.toString());
                 list.add(album);
             }
             return list;

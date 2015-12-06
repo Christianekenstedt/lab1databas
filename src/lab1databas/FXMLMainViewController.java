@@ -11,6 +11,8 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -19,7 +21,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
+import javafx.scene.control.*;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.Menu;
@@ -84,7 +86,7 @@ public class FXMLMainViewController implements Initializable {
         String choiceOne = "Get Album by Title", choiceTwo = "Get Album by Artist";
         ObservableList<String> choices = FXCollections.observableArrayList(choiceOne, choiceTwo);
         searchComboBox.getItems().addAll(choices);
-        searchComboBox.getSelectionModel().select("Get Album by Title");
+        //searchComboBox.getSelectionModel().select("Get Album by Title");
         searchField.setPromptText("Type here");
         
     }    
@@ -97,23 +99,50 @@ public class FXMLMainViewController implements Initializable {
     @FXML
     private void showAlbumButtonHandle(ActionEvent event) {
         table.getColumns().clear();
-        //buildData("Album");
     }
 
     @FXML
     private void showArtistButtonHandle(ActionEvent event) {
         table.getColumns().clear();
-        //buildData("Artist");
     }
 
     @FXML
     private void handleSearchButn(ActionEvent event) throws SQLException {
         if(!searchField.getText().isEmpty()){
             if(searchComboBox.getValue().equals("Get Album by Title")){
-                ArrayList<Object> list = connection.getAlbumByTitle(searchField.getText());
-                updateUI(list);              
+                new Thread(){
+                    @Override
+                    public void run(){
+                        try {
+                            ArrayList<Object> list = connection.getAlbumByTitle(searchField.getText());
+                            javafx.application.Platform.runLater(new Runnable(){
+                                @Override
+                                public void run(){
+                                    updateUI(list,1);
+                                }
+                            });
+                        } catch (SQLException ex) {
+                            Logger.getLogger(FXMLMainViewController.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                    }
+                }.start();            
             }else if(searchComboBox.getValue().equals("Get Album by Artist")){
-                //updateUI(getAlbumByTitle(searchField.getText()));
+                new Thread(){
+                    @Override
+                    public void run(){
+                        try {
+                            ArrayList<Object> list = connection.getAlbumsByArtist(searchField.getText());
+                            javafx.application.Platform.runLater(new Runnable(){
+                                @Override
+                                public void run(){
+                                    updateUI(list,2);
+                                }
+                            });
+                        } catch (SQLException ex) {
+                            Logger.getLogger(FXMLMainViewController.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                    }
+                }.start();
             }
         }
     }
@@ -121,7 +150,6 @@ public class FXMLMainViewController implements Initializable {
     @FXML
     public void addAlbumHandle(ActionEvent event) throws IOException {
         
-        //Parent root = FXMLLoader.load(getClass().getResource("/FXMLView/FXMLAddView.fxml"));
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/FXMLView/FXMLAddView.fxml"));
         Parent root = loader.load();
         
@@ -143,18 +171,31 @@ public class FXMLMainViewController implements Initializable {
         connectedLabel.setText("Connected as " + connection.getConnectedUser());
     }
     
-    public void updateUI(ArrayList<Object> inputList){
-        ObservableList<Object> list =  FXCollections.observableArrayList(inputList);
-        
-            table.getColumns().clear();
-            TableColumn<Object, Integer> cID = new TableColumn<>("AlbumID");
-            cID.setCellValueFactory(new PropertyValueFactory("albumID"));
-            TableColumn<Object, String> cName = new TableColumn<>("Title");
-            cName.setCellValueFactory(new PropertyValueFactory("name"));
-            TableColumn<Object, LocalDate> cDate = new TableColumn<>("Release Date");
-            cDate.setCellValueFactory(new PropertyValueFactory("releaseDate"));
-            table.getColumns().addAll(cID,cName,cDate);
-            table.setItems(list);
+    public void updateUI(ArrayList<Object> inputList, int select){
+            if(select == 1){ // 1 = AlbumByTitle
+                ObservableList<Object> list =  FXCollections.observableArrayList(inputList);
+                table.getColumns().clear();
+                TableColumn<Object, Integer> cID = new TableColumn<>("AlbumID");
+                cID.setCellValueFactory(new PropertyValueFactory("albumID"));
+                TableColumn<Object, String> cName = new TableColumn<>("Title");
+                cName.setCellValueFactory(new PropertyValueFactory("name"));
+                TableColumn<Object, LocalDate> cDate = new TableColumn<>("Release Date");
+                cDate.setCellValueFactory(new PropertyValueFactory("releaseDate"));
+                table.getColumns().addAll(cID,cName,cDate);
+                table.setItems(list);
+                
+            }else if (select == 2){ // AlbumsByArtist
+                ObservableList<Object> list =  FXCollections.observableArrayList(inputList);
+                table.getColumns().clear();
+                TableColumn<Object, Integer> cID = new TableColumn<>("AlbumID");
+                cID.setCellValueFactory(new PropertyValueFactory("albumID"));
+                TableColumn<Object, String> cName = new TableColumn<>("Title");
+                cName.setCellValueFactory(new PropertyValueFactory("name"));
+                TableColumn<Object, LocalDate> cDate = new TableColumn<>("Release Date");
+                cDate.setCellValueFactory(new PropertyValueFactory("releaseDate"));
+                table.getColumns().addAll(cName,cDate);
+                table.setItems(list);
+            }
     }
     
     /*
