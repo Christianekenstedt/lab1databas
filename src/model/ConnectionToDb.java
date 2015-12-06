@@ -30,6 +30,20 @@ public class ConnectionToDb implements DBCommunication{
         this.password = password;
         con = null;
     }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public String getHost() {
+        return host;
+    }
+
+    public String getDatabase() {
+        return database;
+    }
+    
+    
     
     public boolean connectToDatabase()throws SQLException{
         String server = "jdbc:mysql://" + host + ":3306/" + database +
@@ -205,5 +219,45 @@ public class ConnectionToDb implements DBCommunication{
     }
     public String getConnectedUser(){
         return username;
+    }
+
+    @Override
+    public ArrayList<Object> getAlbumByGenre(int genre) throws SQLException {
+        ResultSet rs = null;
+        PreparedStatement genreByName = con.prepareStatement("SELECT * FROM Album WHERE genre = ?");
+        try{
+            genreByName.clearParameters();
+            genreByName.setInt(1,genre);
+            
+            rs = genreByName.executeQuery();
+            ArrayList<Object> list = new ArrayList<>();
+            while(rs.next()){
+                Album album = new Album(rs.getInt(1), rs.getString(2),rs.getDate(3));
+                list.add(album);
+            }
+            return list;
+        }finally{
+            rs.close();
+        }
+    }
+
+    @Override
+    public ArrayList<Object> getAlbumByGrade(int grade) throws SQLException {
+        ResultSet rs = null;
+        PreparedStatement gradeByName = con.prepareStatement("SELECT * FROM Album WHERE grade = ?");
+        try{
+            gradeByName.clearParameters();
+            gradeByName.setInt(1,grade);
+            
+            rs = gradeByName.executeQuery();
+            ArrayList<Object> list = new ArrayList<>();
+            while(rs.next()){
+                Album album = new Album(rs.getInt(1), rs.getString(2),rs.getDate(3));
+                list.add(album);
+            }
+            return list;
+        }finally{
+            rs.close();
+        }
     }
 }

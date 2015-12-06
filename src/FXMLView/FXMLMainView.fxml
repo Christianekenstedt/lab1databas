@@ -8,33 +8,37 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="lab1databas.FXMLMainViewController">
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="lab1databas.FXMLMainViewController">
    <children>
       <MenuBar fx:id="menuBar">
         <menus>
           <Menu fx:id="fileMenu" mnemonicParsing="false" text="File">
             <items>
                   <MenuItem fx:id="addAlbumMenuItem" mnemonicParsing="false" onAction="#addAlbumHandle" text="Add Album" />
-                  <MenuItem fx:id="closeMenuItem1" mnemonicParsing="false" text="Close" />
+                  <MenuItem fx:id="closeMenuItem" mnemonicParsing="false" onAction="#handleCloseMenuItem" text="Close" />
             </items>
           </Menu>
           <Menu fx:id="helpMenu" mnemonicParsing="false" text="Help">
             <items>
-              <MenuItem fx:id="aboutMenuItem" mnemonicParsing="false" text="About" />
+              <MenuItem fx:id="aboutMenuItem" mnemonicParsing="false" onAction="#handleAboutMenuItem" text="About" />
             </items>
           </Menu>
         </menus>
       </MenuBar>
-      <AnchorPane prefHeight="541.0" prefWidth="800.0">
+      <AnchorPane prefHeight="541.0" prefWidth="600.0">
          <children>
-            <Button fx:id="disconnectButton" layoutX="652.0" layoutY="2.0" mnemonicParsing="false" onAction="#disconnectButtonHandle" prefHeight="25.0" prefWidth="140.0" text="Disconnect!" />
-            <TableView fx:id="table" layoutY="315.0" prefHeight="260.0" prefWidth="800.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="315.0" />
-            <Button fx:id="showAlbumButton" layoutX="68.0" layoutY="246.0" mnemonicParsing="false" onAction="#showAlbumButtonHandle" text="Show Album" />
-            <Button fx:id="showArtistButton" layoutX="166.0" layoutY="246.0" mnemonicParsing="false" onAction="#showArtistButtonHandle" text="Show Artists" />
-            <TextField fx:id="searchField" layoutX="63.0" layoutY="185.0" />
-            <Button fx:id="searchButn" layoutX="217.0" layoutY="185.0" mnemonicParsing="false" onAction="#handleSearchButn" text="Search" />
+            <TableView fx:id="table" layoutY="113.0" prefHeight="240.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="113.0" />
+            <TextField fx:id="searchField" layoutX="18.0" layoutY="76.0" />
+            <Button fx:id="searchButn" layoutX="174.0" layoutY="76.0" mnemonicParsing="false" onAction="#handleSearchButn" text="Search" />
             <Label fx:id="tempLabel" layoutX="68.0" layoutY="217.0" />
-            <ComboBox fx:id="searchComboBox" layoutX="63.0" layoutY="154.0" prefWidth="150.0" />
+            <ComboBox fx:id="searchComboBox" layoutX="17.0" layoutY="47.0" prefWidth="150.0" />
+            <Label layoutX="16.0" layoutY="18.0" text="Search by Artist or Album:" />
+            <Label layoutX="316.0" layoutY="19.0" text="Search by Genre or Grade" />
+            <ComboBox fx:id="genreComboBox" layoutX="344.0" layoutY="47.0" onMouseClicked="#genreBoxClicked" prefWidth="150.0" />
+            <ComboBox fx:id="gradeComboBox" layoutX="344.0" layoutY="76.0" onMouseClicked="#gradeBoxClicked" prefWidth="150.0" />
+            <Label layoutX="300.0" layoutY="51.0" text="Genre" />
+            <Label layoutX="300.0" layoutY="80.0" text="Grade" />
+            <Button fx:id="searchButtonCombo" layoutX="508.0" layoutY="76.0" mnemonicParsing="false" onAction="#handleButtonCombo" text="Search" />
          </children>
       </AnchorPane>
       <HBox prefHeight="23.0" prefWidth="800.0">

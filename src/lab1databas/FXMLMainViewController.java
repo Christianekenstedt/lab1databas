@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -31,10 +32,13 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import model.ConnectionToDb;
+import model.Genre;
+import model.Grade;
 
 /**
  * FXML Controller class
@@ -50,17 +54,11 @@ public class FXMLMainViewController implements Initializable {
     private Menu helpMenu;
     @FXML
     private MenuItem aboutMenuItem;
-    @FXML
-    private Button disconnectButton;
     private String user, pwd;
     @FXML
     private TableView<Object> table;
     @FXML
     private Label connectedLabel;
-    @FXML
-    private Button showAlbumButton;
-    @FXML
-    private Button showArtistButton;
     @FXML
     private TextField searchField;
     @FXML
@@ -70,11 +68,17 @@ public class FXMLMainViewController implements Initializable {
     @FXML
     private ComboBox<String> searchComboBox;
     @FXML
-    private MenuItem closeMenuItem1;
-    @FXML
     private MenuItem addAlbumMenuItem;
     
     private ConnectionToDb connection;
+    @FXML
+    private ComboBox<Genre> genreComboBox;
+    @FXML
+    private ComboBox<Grade> gradeComboBox;
+    @FXML
+    private Button searchButtonCombo;
+    @FXML
+    private MenuItem closeMenuItem;
     
     
     /**
@@ -89,19 +93,17 @@ public class FXMLMainViewController implements Initializable {
         searchComboBox.getSelectionModel().select("Get Album by Title");
         searchField.setPromptText("Type here");
         
+        
     }    
     
-    @FXML
     private void disconnectButtonHandle(ActionEvent event) throws SQLException {
         	connection.closeConnection();
     }
     
-    @FXML
     private void showAlbumButtonHandle(ActionEvent event) {
         table.getColumns().clear();
     }
 
-    @FXML
     private void showArtistButtonHandle(ActionEvent event) {
         table.getColumns().clear();
     }
@@ -109,33 +111,24 @@ public class FXMLMainViewController implements Initializable {
     @FXML
     private void handleSearchButn(ActionEvent event) throws SQLException {
         if(!searchField.getText().isEmpty()){
-            if(searchComboBox.getValue().equals("Get Album by Title")){
-                new Thread(){
+            int selection = 0;
+            if(searchComboBox.getValue().equals("Get Album by Title")) selection = 1;
+            else if(searchComboBox.getValue().equals("Get Album by Artist")) selection = 2;
+            final int finalSelect = selection;
+            new Thread(){
                     @Override
                     public void run(){
                         try {
-                            ArrayList<Object> list = connection.getAlbumByTitle(searchField.getText());
+                            ArrayList<Object> list;
+                            if(finalSelect == 1){
+                                list = connection.getAlbumByTitle(searchField.getText());
+                            }else{
+                                list = connection.getAlbumsByArtist(searchField.getText());
+                            }
                             javafx.application.Platform.runLater(new Runnable(){
                                 @Override
                                 public void run(){
-                                    updateUI(list,1);
-                                }
-                            });
-                        } catch (SQLException ex) {
-                            Logger.getLogger(FXMLMainViewController.class.getName()).log(Level.SEVERE, null, ex);
-                        }
-                    }
-                }.start();            
-            }else if(searchComboBox.getValue().equals("Get Album by Artist")){
-                new Thread(){
-                    @Override
-                    public void run(){
-                        try {
-                            ArrayList<Object> list = connection.getAlbumsByArtist(searchField.getText());
-                            javafx.application.Platform.runLater(new Runnable(){
-                                @Override
-                                public void run(){
-                                    updateUI(list,2);
+                                    updateUI(list, finalSelect);
                                 }
                             });
                         } catch (SQLException ex) {
@@ -143,7 +136,7 @@ public class FXMLMainViewController implements Initializable {
                         }
                     }
                 }.start();
-            }
+            
         }
     }
     
@@ -160,6 +153,7 @@ public class FXMLMainViewController implements Initializable {
         Stage stage = new Stage();
         Scene scene = new Scene(root);
         stage.setScene(scene);
+        stage.setResizable(false);
         stage.setTitle("Add Album");
         stage.initModality(Modality.APPLICATION_MODAL);
         stage.showAndWait();
@@ -227,5 +221,86 @@ public class FXMLMainViewController implements Initializable {
         | |  | |____| |  | | |     ____) |
         |_|  |______|_|  |_|_|    |_____/ 
     */
+
+    @FXML
+    private void handleButtonCombo(ActionEvent event) throws SQLException {
+        if(gradeComboBox.getValue() != null){
+            new Thread(){
+                    @Override
+                    public void run(){
+                        try {
+                            ArrayList<Object> list;
+                            list = connection.getAlbumByGrade(gradeComboBox.getValue().getGradeID());
+                            javafx.application.Platform.runLater(new Runnable(){
+                                @Override
+                                public void run(){
+                                    updateUI(list, 1);
+                                }
+                            });
+                        } catch (SQLException ex) {
+                            Logger.getLogger(FXMLMainViewController.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                    }
+                }.start();
+        }else{
+            new Thread(){
+                    @Override
+                    public void run(){
+                        try {
+                            ArrayList<Object> list;
+                            list = connection.getAlbumByGenre(genreComboBox.getValue().getGenreID());
+                            javafx.application.Platform.runLater(new Runnable(){
+                                @Override
+                                public void run(){
+                                    updateUI(list, 1);
+                                }
+                            });
+                        } catch (SQLException ex) {
+                            Logger.getLogger(FXMLMainViewController.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                    }
+            }.start();
+        }
+    }
+
+    @FXML
+    private void genreBoxClicked(MouseEvent event) throws SQLException {
+        updateComboBoxes();
+        gradeComboBox.getSelectionModel().clearSelection();
+    }
+
+    @FXML
+    private void gradeBoxClicked(MouseEvent event) throws SQLException {
+        updateComboBoxes();
+        genreComboBox.getSelectionModel().clearSelection();
+    }
+    
+    private void updateComboBoxes() throws SQLException{
+        genreComboBox.setItems(FXCollections.observableArrayList(connection.getGenre()));
+        gradeComboBox.setItems(FXCollections.observableArrayList(connection.getGrades()));
+    }
+
+    @FXML
+    private void handleCloseMenuItem(ActionEvent event) throws SQLException {
+        connection.closeConnection();
+        Platform.exit();
+    }
+
+    @FXML
+    private void handleAboutMenuItem(ActionEvent event) throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/FXMLView/FXMLAboutView.fxml"));
+        Parent root = loader.load();
+        
+        FXMLAboutViewController c = loader.getController();
+        c.initData(connection.getHost(), connection.getDatabase(), connection.getUsername());
+        
+        Stage stage = new Stage();
+        Scene scene = new Scene(root);
+        stage.setScene(scene);
+        stage.setTitle("About");
+        stage.setResizable(false);
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.showAndWait();
+    }
     
 }

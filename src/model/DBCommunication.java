@@ -15,5 +15,6 @@ public interface DBCommunication {
     public ArrayList<Object> getAlbumByTitle(String name)throws SQLException;
     public ArrayList<Genre> getGenre()throws SQLException;
     public ArrayList<Grade> getGrades()throws SQLException;
-    
+    public ArrayList<Object> getAlbumByGenre(int genre) throws SQLException;
+    public ArrayList<Object> getAlbumByGrade(int grade) throws SQLException;
 }   
