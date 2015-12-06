@@ -32,7 +32,7 @@ import model.ConnectionToDb;
 
 /**
  *
- * @author chris
+ * @author Christian Ekenstedt & Gustaf Holmström
  */
 public class FXMLDocumentController implements Initializable {
     

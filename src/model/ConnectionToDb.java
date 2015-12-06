@@ -14,7 +14,7 @@ import javafx.application.Platform;
 
 /**
  *
- * @author chris
+ * @author Christian Ekenstedt & Gustaf Holmström
  */
 public class ConnectionToDb implements DBCommunication{
     private Connection con;
