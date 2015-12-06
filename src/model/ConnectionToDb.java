@@ -132,13 +132,12 @@ public class ConnectionToDb implements DBCommunication{
                 + "Album_Artist.album and Album_Artist.artist = Artist.artistID AND Artist.name = ?");
         try{
             albumByArtist.clearParameters();
-            albumByArtist.setString(1,name + "%");
+            albumByArtist.setString(1,name);
             
             rs = albumByArtist.executeQuery();
             ArrayList<Object> list = new ArrayList<>();
             while(rs.next()){
                 Album album = new Album(rs.getInt(1), rs.getString(2),rs.getDate(3));
-                System.out.println(album.toString());
                 list.add(album);
             }
             return list;

@@ -86,7 +86,7 @@ public class FXMLMainViewController implements Initializable {
         String choiceOne = "Get Album by Title", choiceTwo = "Get Album by Artist";
         ObservableList<String> choices = FXCollections.observableArrayList(choiceOne, choiceTwo);
         searchComboBox.getItems().addAll(choices);
-        //searchComboBox.getSelectionModel().select("Get Album by Title");
+        searchComboBox.getSelectionModel().select("Get Album by Title");
         searchField.setPromptText("Type here");
         
     }    
@@ -193,7 +193,7 @@ public class FXMLMainViewController implements Initializable {
                 cName.setCellValueFactory(new PropertyValueFactory("name"));
                 TableColumn<Object, LocalDate> cDate = new TableColumn<>("Release Date");
                 cDate.setCellValueFactory(new PropertyValueFactory("releaseDate"));
-                table.getColumns().addAll(cName,cDate);
+                table.getColumns().addAll(cID,cName,cDate);
                 table.setItems(list);
             }
     }
