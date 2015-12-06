@@ -16,7 +16,7 @@ import javafx.application.Platform;
  *
  * @author chris
  */
-public class ConnectionToDb {
+public class ConnectionToDb implements DBCommunication{
     private Connection con;
     private String username;
     private String password;
@@ -59,6 +59,7 @@ public class ConnectionToDb {
         }
     }
     
+    @Override
     public void addAlbum(String title, String artist, String nationality, Date date, Genre genre, Grade grade) throws SQLException{
         
         PreparedStatement addAlbumPrepSt = con.prepareStatement("INSERT INTO Album(name, releaseDate, genre, grade) VALUES(?, ?, ?, ?)");
@@ -81,6 +82,7 @@ public class ConnectionToDb {
     
     
     
+    @Override
     public ArrayList<Object> getAlbumsByArtist(String name) throws SQLException{
         ResultSet rs = null;
         PreparedStatement albumByArtist = con.prepareStatement("SELECT Album.name, Artist.name FROM Album, Album_Artist, Artist WHERE Album.albumID = "
@@ -101,6 +103,7 @@ public class ConnectionToDb {
         }
     }
     
+    @Override
     public ArrayList<Object> getAlbumByTitle(String name) throws SQLException{
         ResultSet rs = null;
         PreparedStatement albumByName = con.prepareStatement("SELECT * FROM Album WHERE name LIKE ?");
@@ -120,6 +123,7 @@ public class ConnectionToDb {
         }
     }
     
+    @Override
     public ArrayList<Genre> getGenre() throws SQLException{
         ResultSet rs = null;
         PreparedStatement gradesPreStatement = con.prepareStatement("SELECT * FROM Genre");
@@ -138,6 +142,7 @@ public class ConnectionToDb {
         }
     }
     
+    @Override
     public ArrayList<Grade> getGrades() throws SQLException{
         ResultSet rs = null;
         PreparedStatement gradesPreStatement = con.prepareStatement("SELECT * FROM Grade");
