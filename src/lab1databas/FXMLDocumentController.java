@@ -47,7 +47,7 @@ public class FXMLDocumentController implements Initializable {
     @FXML
     private Label titleLabel;
     
-    private String userOne = "christian", userTwo = "gustaf";
+    private String userOne, userTwo;
     
     private Parent mainParent;
     private FXMLLoader loader;
@@ -57,8 +57,11 @@ public class FXMLDocumentController implements Initializable {
     
     @Override
     public void initialize(URL url, ResourceBundle rb){
+        userOne = "christian";
+        userTwo = "gustaf";
         ObservableList<String> userList = FXCollections.observableArrayList(userOne, userTwo);
         userPicker.getItems().addAll(userList);
+        
     }    
 
     @FXML
