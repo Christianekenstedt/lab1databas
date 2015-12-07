@@ -1,54 +1,21 @@
 package model;
 
 import java.io.Serializable;
-import javax.persistence.Basic;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
-import javax.persistence.Table;
-import javax.xml.bind.annotation.XmlRootElement;
 
 /**
+ * This class represent a review.
  *
  * @author Christian Ekenstedt & Gustaf Holmström
  */
-@Entity
-@Table(name = "Review")
-@XmlRootElement
-@NamedQueries({
-    @NamedQuery(name = "Review.findAll", query = "SELECT r FROM Review r"),
-    @NamedQuery(name = "Review.findByReviewID", query = "SELECT r FROM Review r WHERE r.reviewID = :reviewID"),
-    @NamedQuery(name = "Review.findByText", query = "SELECT r FROM Review r WHERE r.text = :text")})
 public class Review implements Serializable {
 
-    private static final long serialVersionUID = 1L;
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Basic(optional = false)
-    @Column(name = "reviewID")
     private Integer reviewID;
-    @Column(name = "text")
     private String text;
-    @JoinColumn(name = "album", referencedColumnName = "albumID")
-    @ManyToOne(optional = false)
     private Album album;
-    @JoinColumn(name = "user", referencedColumnName = "userID")
-    @ManyToOne(optional = false)
     private TUser user;
 
     /**
-     *
-     */
-    public Review() {
-    }
-
-    /**
+     * Creates a Review with a unique id.
      *
      * @param reviewID
      */
@@ -57,14 +24,16 @@ public class Review implements Serializable {
     }
 
     /**
+     * Returns the unique id of the Review.
      *
-     * @return
+     * @return the unique id of the Review.
      */
     public Integer getReviewID() {
         return reviewID;
     }
 
     /**
+     * Sets the unique id of the review.
      *
      * @param reviewID
      */
@@ -73,22 +42,25 @@ public class Review implements Serializable {
     }
 
     /**
+     * Get the text in the Review.
      *
-     * @return
+     * @return a string with the text of the Review.
      */
     public String getText() {
         return text;
     }
 
     /**
+     * Sets the text of the review.
      *
-     * @param text
+     * @param text, the text to be set for the review.
      */
     public void setText(String text) {
         this.text = text;
     }
 
     /**
+     * Returns the album where the review is set to.
      *
      * @return
      */
@@ -97,6 +69,7 @@ public class Review implements Serializable {
     }
 
     /**
+     * Sets the album to review.
      *
      * @param album
      */
@@ -105,57 +78,31 @@ public class Review implements Serializable {
     }
 
     /**
+     * Get the user who created the review.
      *
-     * @return
+     * @return the user who created the review.
      */
     public TUser getUser() {
         return user;
     }
 
     /**
+     * Set the user who created the review.
      *
-     * @param user
+     * @param user, the user who created the review.
      */
     public void setUser(TUser user) {
         this.user = user;
     }
 
     /**
+     * Returns a String representation of the review.
      *
-     * @return
-     */
-    @Override
-    public int hashCode() {
-        int hash = 0;
-        hash += (reviewID != null ? reviewID.hashCode() : 0);
-        return hash;
-    }
-
-    /**
-     *
-     * @param object
-     * @return
-     */
-    @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Review)) {
-            return false;
-        }
-        Review other = (Review) object;
-        if ((this.reviewID == null && other.reviewID != null) || (this.reviewID != null && !this.reviewID.equals(other.reviewID))) {
-            return false;
-        }
-        return true;
-    }
-
-    /**
-     *
-     * @return
+     * @return a String representation of the review.
      */
     @Override
     public String toString() {
-        return "model.Review[ reviewID=" + reviewID + " ]";
+        return "model.Review[ reviewID=" + reviewID + " ] on" + album + ": [" + text + "] Created by: " + user;
     }
-    
+
 }
