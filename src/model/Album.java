@@ -32,59 +32,30 @@ import javax.xml.bind.annotation.XmlTransient;
  *
  * @author Christian Ekenstedt & Gustaf Holmström
  */
-@Entity
-@Table(name = "Album")
-@XmlRootElement
-@NamedQueries({
-    @NamedQuery(name = "Album.findAll", query = "SELECT a FROM Album a"),
-    @NamedQuery(name = "Album.findByAlbumID", query = "SELECT a FROM Album a WHERE a.albumID = :albumID"),
-    @NamedQuery(name = "Album.findByName", query = "SELECT a FROM Album a WHERE a.name = :name"),
-    @NamedQuery(name = "Album.findByReleaseDate", query = "SELECT a FROM Album a WHERE a.releaseDate = :releaseDate")})
-public class Album implements Serializable {
 
-    private static final long serialVersionUID = 1L;
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Basic(optional = false)
-    @Column(name = "albumID")
+/**
+* Album contains methods to access the result from the database
+*/
+public class Album implements Serializable {
+    
     private Integer albumID;
-    @Basic(optional = false)
-    @Column(name = "name")
     private String name;
-    @Basic(optional = false)
-    @Column(name = "releaseDate")
-    @Temporal(TemporalType.DATE)
     private Date releaseDate;
-    @JoinTable(name = "Album_Artist", joinColumns = {
-        @JoinColumn(name = "album", referencedColumnName = "albumID")}, inverseJoinColumns = {
-        @JoinColumn(name = "artist", referencedColumnName = "artistID")})
-    @ManyToMany
     private Collection<Artist> artistCollection;
-    @JoinColumn(name = "genre", referencedColumnName = "genreID")
-    @ManyToOne(optional = false)
     private Genre genre;
-    @JoinColumn(name = "grade", referencedColumnName = "gradeID")
-    @ManyToOne(optional = false)
     private Grade grade;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "album")
     private Collection<Review> reviewCollection;
 
     /**
-     *
-     */
-    public Album() {
-    }
-
-    /**
-     *
-     * @param albumID
+     * Constructor recives a integer
+     * @param albumID, a unique integer
      */
     public Album(Integer albumID) {
         this.albumID = albumID;
     }
 
     /**
-     *
+     *  constructor reciving int albumID, String name and date of album release
      * @param albumID
      * @param name
      * @param releaseDate
@@ -96,7 +67,7 @@ public class Album implements Serializable {
     }
 
     /**
-     *
+     * returns albumID in integer
      * @return
      */
     public Integer getAlbumID() {
@@ -104,7 +75,7 @@ public class Album implements Serializable {
     }
 
     /**
-     *
+     * set's the albumID. Recives integer
      * @param albumID
      */
     public void setAlbumID(Integer albumID) {
@@ -112,7 +83,7 @@ public class Album implements Serializable {
     }
 
     /**
-     *
+     * returns String name of the album
      * @return
      */
     public String getName() {
@@ -120,7 +91,7 @@ public class Album implements Serializable {
     }
 
     /**
-     *
+     * set's the albums name, recives string name
      * @param name
      */
     public void setName(String name) {
@@ -128,7 +99,7 @@ public class Album implements Serializable {
     }
 
     /**
-     *
+     * returna the data of the albums release
      * @return
      */
     public Date getReleaseDate() {
@@ -136,7 +107,7 @@ public class Album implements Serializable {
     }
 
     /**
-     *
+     * set's the album release date, recives a Date
      * @param releaseDate
      */
     public void setReleaseDate(Date releaseDate) {
@@ -144,7 +115,7 @@ public class Album implements Serializable {
     }
 
     /**
-     *
+     * returns a collection of Artist
      * @return
      */
     @XmlTransient
@@ -153,7 +124,7 @@ public class Album implements Serializable {
     }
 
     /**
-     *
+     * set's teh collectuion of artist
      * @param artistCollection
      */
     public void setArtistCollection(Collection<Artist> artistCollection) {
@@ -161,7 +132,7 @@ public class Album implements Serializable {
     }
 
     /**
-     *
+     * returns the albums genre
      * @return
      */
     public Genre getGenre() {
@@ -169,7 +140,7 @@ public class Album implements Serializable {
     }
 
     /**
-     *
+     * set's the albums genre
      * @param genre
      */
     public void setGenre(Genre genre) {
@@ -177,7 +148,7 @@ public class Album implements Serializable {
     }
 
     /**
-     *
+     * returns the albums grade
      * @return
      */
     public Grade getGrade() {
@@ -185,15 +156,15 @@ public class Album implements Serializable {
     }
 
     /**
-     *
+     * set's the albums grade
      * @param grade
      */
     public void setGrade(Grade grade) {
         this.grade = grade;
     }
 
-    /**
-     *
+    /** 
+     * returns a collection of reviews for the album
      * @return
      */
     @XmlTransient
@@ -202,7 +173,7 @@ public class Album implements Serializable {
     }
 
     /**
-     *
+     * set's the collections of reviews for the album
      * @param reviewCollection
      */
     public void setReviewCollection(Collection<Review> reviewCollection) {
@@ -210,36 +181,7 @@ public class Album implements Serializable {
     }
 
     /**
-     *
-     * @return
-     */
-    @Override
-    public int hashCode() {
-        int hash = 0;
-        hash += (albumID != null ? albumID.hashCode() : 0);
-        return hash;
-    }
-
-    /**
-     *
-     * @param object
-     * @return
-     */
-    @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Album)) {
-            return false;
-        }
-        Album other = (Album) object;
-        if ((this.albumID == null && other.albumID != null) || (this.albumID != null && !this.albumID.equals(other.albumID))) {
-            return false;
-        }
-        return true;
-    }
-
-    /**
-     *
+     * returns string with information of what it is
      * @return
      */
     @Override

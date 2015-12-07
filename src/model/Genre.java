@@ -20,35 +20,18 @@ import javax.xml.bind.annotation.XmlTransient;
  *
  * @author Christian Ekenstedt & Gustaf Holmström
  */
-@Entity
-@Table(name = "Genre")
-@XmlRootElement
-@NamedQueries({
-    @NamedQuery(name = "Genre.findAll", query = "SELECT g FROM Genre g"),
-    @NamedQuery(name = "Genre.findByGenreID", query = "SELECT g FROM Genre g WHERE g.genreID = :genreID"),
-    @NamedQuery(name = "Genre.findByName", query = "SELECT g FROM Genre g WHERE g.name = :name")})
+
+/**
+* Genre contains methods to access the result from the database
+*/
 public class Genre implements Serializable {
 
-    private static final long serialVersionUID = 1L;
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Basic(optional = false)
-    @Column(name = "genreID")
     private Integer genreID;
-    @Basic(optional = false)
-    @Column(name = "name")
     private String name;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "genre")
     private Collection<Album> albumCollection;
 
     /**
-     *
-     */
-    public Genre() {
-    }
-
-    /**
-     *
+     * constructor reciving the genre ID
      * @param genreID
      */
     public Genre(Integer genreID) {
@@ -56,7 +39,7 @@ public class Genre implements Serializable {
     }
 
     /**
-     *
+     * constructor reciving genre ID and string name
      * @param genreID
      * @param name
      */
@@ -66,7 +49,7 @@ public class Genre implements Serializable {
     }
 
     /**
-     *
+     * get's the genreID in integer
      * @return
      */
     public Integer getGenreID() {
@@ -74,15 +57,15 @@ public class Genre implements Serializable {
     }
 
     /**
-     *
-     * @param genreID
+     * set's the genreID with integer
+     * @param genreID 
      */
     public void setGenreID(Integer genreID) {
         this.genreID = genreID;
     }
 
     /**
-     *
+     * get's the genre's name
      * @return
      */
     public String getName() {
@@ -90,7 +73,7 @@ public class Genre implements Serializable {
     }
 
     /**
-     *
+     * set's the genre name
      * @param name
      */
     public void setName(String name) {
@@ -98,53 +81,7 @@ public class Genre implements Serializable {
     }
 
     /**
-     *
-     * @return
-     */
-    @XmlTransient
-    public Collection<Album> getAlbumCollection() {
-        return albumCollection;
-    }
-
-    /**
-     *
-     * @param albumCollection
-     */
-    public void setAlbumCollection(Collection<Album> albumCollection) {
-        this.albumCollection = albumCollection;
-    }
-
-    /**
-     *
-     * @return
-     */
-    @Override
-    public int hashCode() {
-        int hash = 0;
-        hash += (genreID != null ? genreID.hashCode() : 0);
-        return hash;
-    }
-
-    /**
-     *
-     * @param object
-     * @return
-     */
-    @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Genre)) {
-            return false;
-        }
-        Genre other = (Genre) object;
-        if ((this.genreID == null && other.genreID != null) || (this.genreID != null && !this.genreID.equals(other.genreID))) {
-            return false;
-        }
-        return true;
-    }
-
-    /**
-     *
+     * returns string with genre name
      * @return
      */
     @Override

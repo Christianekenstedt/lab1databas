@@ -14,6 +14,10 @@ import javafx.application.Platform;
  * 
  * @author Christian Ekenstedt & Gustaf Holmström
  */
+
+/**
+* ConnectionToDB contains the methods used to connect to the database and methods to make SQL querys
+*/
 public class ConnectionToDb implements DBCommunication{
     private Connection con;
     private String username;
