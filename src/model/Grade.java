@@ -18,34 +18,20 @@ import javax.xml.bind.annotation.XmlTransient;
  *
  * @author Christian Ekenstedt & Gustaf Holmström
  */
-@Entity
-@Table(name = "Grade")
-@XmlRootElement
-@NamedQueries({
-    @NamedQuery(name = "Grade.findAll", query = "SELECT g FROM Grade g"),
-    @NamedQuery(name = "Grade.findByGradeID", query = "SELECT g FROM Grade g WHERE g.gradeID = :gradeID"),
-    @NamedQuery(name = "Grade.findByName", query = "SELECT g FROM Grade g WHERE g.name = :name")})
+
+/**
+* Grade contains methods to access the result from the database
+*/
 public class Grade implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    @Id
-    @Basic(optional = false)
-    @Column(name = "gradeID")
     private Integer gradeID;
-    @Basic(optional = false)
-    @Column(name = "name")
     private String name;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "grade")
     private Collection<Album> albumCollection;
 
-    /**
-     *
-     */
-    public Grade() {
-    }
 
     /**
-     *
+     * constructor reciving integer with gradeID
      * @param gradeID
      */
     public Grade(Integer gradeID) {
@@ -53,7 +39,7 @@ public class Grade implements Serializable {
     }
 
     /**
-     *
+     * constructor reciving gradeID and grade name
      * @param gradeID
      * @param name
      */
@@ -63,7 +49,7 @@ public class Grade implements Serializable {
     }
 
     /**
-     *
+     * get's the grade ID in integer
      * @return
      */
     public Integer getGradeID() {
@@ -71,7 +57,7 @@ public class Grade implements Serializable {
     }
 
     /**
-     *
+     * set's the gradeID with integer
      * @param gradeID
      */
     public void setGradeID(Integer gradeID) {
@@ -79,7 +65,7 @@ public class Grade implements Serializable {
     }
 
     /**
-     *
+     * get's the grade name, returns string
      * @return
      */
     public String getName() {
@@ -87,7 +73,7 @@ public class Grade implements Serializable {
     }
 
     /**
-     *
+     * set's the grade name with string
      * @param name
      */
     public void setName(String name) {
@@ -95,53 +81,7 @@ public class Grade implements Serializable {
     }
 
     /**
-     *
-     * @return
-     */
-    @XmlTransient
-    public Collection<Album> getAlbumCollection() {
-        return albumCollection;
-    }
-
-    /**
-     *
-     * @param albumCollection
-     */
-    public void setAlbumCollection(Collection<Album> albumCollection) {
-        this.albumCollection = albumCollection;
-    }
-
-    /**
-     *
-     * @return
-     */
-    @Override
-    public int hashCode() {
-        int hash = 0;
-        hash += (gradeID != null ? gradeID.hashCode() : 0);
-        return hash;
-    }
-
-    /**
-     *
-     * @param object
-     * @return
-     */
-    @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Grade)) {
-            return false;
-        }
-        Grade other = (Grade) object;
-        if ((this.gradeID == null && other.gradeID != null) || (this.gradeID != null && !this.gradeID.equals(other.gradeID))) {
-            return false;
-        }
-        return true;
-    }
-
-    /**
-     *
+     * returns informaiton about grade with string
      * @return
      */
     @Override
