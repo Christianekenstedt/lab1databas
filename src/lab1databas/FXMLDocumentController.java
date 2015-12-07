@@ -48,7 +48,7 @@ public class FXMLDocumentController implements Initializable {
     @FXML
     private Label titleLabel;
     
-    private String userOne, userTwo;
+    private String userOne, userTwo, userThree;
     
     private Parent mainParent;
     private FXMLLoader loader;
@@ -60,8 +60,13 @@ public class FXMLDocumentController implements Initializable {
     public void initialize(URL url, ResourceBundle rb){
         userOne = "christian";
         userTwo = "gustaf";
-        ObservableList<String> userList = FXCollections.observableArrayList(userOne, userTwo);
+        userThree = "clientapp";
+        ObservableList<String> userList = FXCollections.observableArrayList(userOne, userTwo,userThree);
         userPicker.getItems().addAll(userList);
+        userPicker.getSelectionModel().select(userThree);
+        passwdTextField.setText("123456"); // FOR NOW ONLY!
+        userPicker.setDisable(true);    
+        passwdTextField.setDisable(true);
         
     }    
 
@@ -84,9 +89,10 @@ public class FXMLDocumentController implements Initializable {
    private void handleLogin(ActionEvent event) throws IOException, SQLException{
        
         String user = userPicker.getValue();
+        
         String pwd = passwdTextField.getText();
         if(userPicker.getValue() != null){
-            ConnectionToDb connection= new ConnectionToDb("db.christianekenstedt.se", "medialibrary", user, pwd);
+            ConnectionToDb connection= new ConnectionToDb("db.christianekenstedt.se", "medialibrary", userThree, pwd);
             loader = new FXMLLoader(getClass().getResource("/FXMLView/FXMLMainView.fxml"));
             mainParent = loader.load();
             
