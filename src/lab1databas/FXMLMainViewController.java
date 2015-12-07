@@ -93,7 +93,7 @@ public class FXMLMainViewController implements Initializable {
     }    
     
     private void disconnectButtonHandle(ActionEvent event) throws SQLException {
-        	connection.closeConnection();
+        connection.closeConnection();
     }
     
     private void showAlbumButtonHandle(ActionEvent event) {
@@ -137,7 +137,7 @@ public class FXMLMainViewController implements Initializable {
     }
     
     @FXML
-    public void addAlbumHandle(ActionEvent event) throws IOException {
+    public void addAlbumHandle(ActionEvent event) throws IOException, SQLException {
         
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/FXMLView/FXMLAddView.fxml"));
         Parent root = loader.load();
@@ -188,36 +188,6 @@ public class FXMLMainViewController implements Initializable {
                 table.setItems(list);
             }
     }
-    
-    /*
-       _____                            _   _               __  __      _   _               _     
-      / ____|                          | | (_)             |  \/  |    | | | |             | |    
-     | |     ___  _ __  _ __   ___  ___| |_ _  ___  _ __   | \  / | ___| |_| |__   ___   __| |___ 
-     | |    / _ \| '_ \| '_ \ / _ \/ __| __| |/ _ \| '_ \  | |\/| |/ _ \ __| '_ \ / _ \ / _` / __|
-     | |___| (_) | | | | | | |  __/ (__| |_| | (_) | | | | | |  | |  __/ |_| | | | (_) | (_| \__ \
-      \_____\___/|_| |_|_| |_|\___|\___|\__|_|\___/|_| |_| |_|  |_|\___|\__|_| |_|\___/ \__,_|___/
-    
-    */
-    
-    /*
-      _____      _            _         __  __      _   _               _     
-     |  __ \    (_)          | |       |  \/  |    | | | |             | |    
-     | |__) | __ ___   ____ _| |_ ___  | \  / | ___| |_| |__   ___   __| |___ 
-     |  ___/ '__| \ \ / / _` | __/ _ \ | |\/| |/ _ \ __| '_ \ / _ \ / _` / __|
-     | |   | |  | |\ V / (_| | ||  __/ | |  | |  __/ |_| | | | (_) | (_| \__ \
-     |_|   |_|  |_| \_/ \__,_|\__\___| |_|  |_|\___|\__|_| |_|\___/ \__,_|___/
-    
-    */
-
-    
-    /*
-      _______ ______ __  __ _____   _____ 
-     |__   __|  ____|  \/  |  __ \ / ____|
-        | |  | |__  | \  / | |__) | (___  
-        | |  |  __| | |\/| |  ___/ \___ \ 
-        | |  | |____| |  | | |     ____) |
-        |_|  |______|_|  |_|_|    |_____/ 
-    */
 
     @FXML
     private void handleButtonCombo(ActionEvent event) throws SQLException {
@@ -273,10 +243,30 @@ public class FXMLMainViewController implements Initializable {
     }
     
     private void updateComboBoxes() throws SQLException{
-        genreComboBox.setItems(FXCollections.observableArrayList(connection.getGenre()));
-        gradeComboBox.setItems(FXCollections.observableArrayList(connection.getGrades()));
+        new Thread(){
+            @Override
+            public void run(){
+                try {
+                    ObservableList<Genre> genres = FXCollections.observableArrayList(connection.getGenre());
+                    ObservableList<Grade> grades = FXCollections.observableArrayList(connection.getGrades());
+                    javafx.application.Platform.runLater(new Runnable(){
+                        @Override
+                        public void run(){
+                            updateUIComboBoxes(genres, grades);
+                        }
+                    });
+                } catch (SQLException ex) {
+                    Logger.getLogger(FXMLMainViewController.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        }.start();
     }
-
+    
+    private void updateUIComboBoxes(ObservableList<Genre> genres, ObservableList<Grade> grades){
+        genreComboBox.setItems(genres);
+        gradeComboBox.setItems(grades);
+    }
+    
     @FXML
     private void handleCloseMenuItem(ActionEvent event) throws SQLException {
         connection.closeConnection();

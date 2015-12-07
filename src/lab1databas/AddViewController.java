@@ -13,13 +13,16 @@ import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextField;
+import javafx.stage.Stage;
 import model.ConnectionToDb;
 import model.Genre;
 import model.Grade;
@@ -68,6 +71,9 @@ public class AddViewController implements Initializable {
         if(title.length()>0 && artist.length() > 0 && genre.getGenreID() != null && grade.getGradeID() != null){
             Date d = Date.valueOf(date);
             connection.addAlbum(title, artist, nationality, d, genre, grade);
+            Node source = (Node)event.getSource();
+            Stage stage = (Stage) source.getScene().getWindow();
+            stage.close();
         }else{
             System.out.println("Fill all the fields!");
         }
@@ -79,14 +85,29 @@ public class AddViewController implements Initializable {
         this.connection = connection;
     }
     
-    public void updateComboBoxes(){// Lägg till för grade också
-        try {
-            // TODO
-            genreComboBox.setItems(FXCollections.observableArrayList(connection.getGenre()));
-            gradeComboBox.setItems(FXCollections.observableArrayList(connection.getGrades()));
-        } catch (SQLException ex) {
-            Logger.getLogger(AddViewController.class.getName()).log(Level.SEVERE, null, ex);
-        }
+    public void updateComboBoxes() throws SQLException{
+        new Thread(){
+            @Override
+            public void run(){
+                try {
+                    ObservableList<Genre> genres = FXCollections.observableArrayList(connection.getGenre());
+                    ObservableList<Grade> grades = FXCollections.observableArrayList(connection.getGrades());
+                    javafx.application.Platform.runLater(new Runnable(){
+                        @Override
+                        public void run(){
+                            updateUIComboBoxes(genres, grades);
+                        }
+                    });
+                } catch (SQLException ex) {
+                    Logger.getLogger(FXMLMainViewController.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        }.start();
+    }
+    
+    private void updateUIComboBoxes(ObservableList<Genre> genres, ObservableList<Grade> grades){
+        genreComboBox.setItems(genres);
+        gradeComboBox.setItems(grades);
     }
     
     
