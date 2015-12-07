@@ -2,28 +2,14 @@ package model;
 
 import java.io.Serializable;
 import java.util.Collection;
-import javax.persistence.Basic;
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
  * @author Christian Ekenstedt & Gustaf Holmström
  */
-
 /**
-* Genre contains methods to access the result from the database
-*/
+ * Genre contains methods to access the result from the database
+ */
 public class Genre implements Serializable {
 
     private Integer genreID;
@@ -32,6 +18,7 @@ public class Genre implements Serializable {
 
     /**
      * constructor reciving the genre ID
+     *
      * @param genreID
      */
     public Genre(Integer genreID) {
@@ -40,6 +27,7 @@ public class Genre implements Serializable {
 
     /**
      * constructor reciving genre ID and string name
+     *
      * @param genreID
      * @param name
      */
@@ -50,6 +38,7 @@ public class Genre implements Serializable {
 
     /**
      * get's the genreID in integer
+     *
      * @return
      */
     public Integer getGenreID() {
@@ -58,7 +47,8 @@ public class Genre implements Serializable {
 
     /**
      * set's the genreID with integer
-     * @param genreID 
+     *
+     * @param genreID
      */
     public void setGenreID(Integer genreID) {
         this.genreID = genreID;
@@ -66,6 +56,7 @@ public class Genre implements Serializable {
 
     /**
      * get's the genre's name
+     *
      * @return
      */
     public String getName() {
@@ -74,6 +65,7 @@ public class Genre implements Serializable {
 
     /**
      * set's the genre name
+     *
      * @param name
      */
     public void setName(String name) {
@@ -82,11 +74,12 @@ public class Genre implements Serializable {
 
     /**
      * returns string with genre name
+     *
      * @return
      */
     @Override
     public String toString() {
         return getName();
     }
-    
+
 }

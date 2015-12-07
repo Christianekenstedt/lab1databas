@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package lab1databas;
 
 import java.net.URL;
@@ -26,8 +21,6 @@ public class FXMLAboutViewController implements Initializable {
     @FXML
     private Label userLabel;
 
-    
-
     /**
      * Initializes the controller class.
      */
@@ -36,11 +29,11 @@ public class FXMLAboutViewController implements Initializable {
         // TODO
         hostLabel.setAlignment(Pos.CENTER);
     }
-    
-    public void initData(String host, String database, String user){
+
+    public void initData(String host, String database, String user) {
         hostLabel.setText("Host: " + host);
         databaseLabel.setText("Database: " + database);
         userLabel.setText("User connected: " + user);
     }
-    
+
 }

@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package lab1databas;
 
 import java.io.IOException;
@@ -35,7 +30,7 @@ import model.ConnectionToDb;
  * @author Christian Ekenstedt & Gustaf Holmström
  */
 public class FXMLDocumentController implements Initializable {
-    
+
     private Label label;
     @FXML
     private Label userLabel;
@@ -47,60 +42,60 @@ public class FXMLDocumentController implements Initializable {
     private TextField passwdTextField;
     @FXML
     private Label titleLabel;
-    
+
     private String userOne, userTwo, userThree;
-    
+
     private Parent mainParent;
     private FXMLLoader loader;
-    
+
     @FXML
     private Button loginButton;
-    
+
     @Override
-    public void initialize(URL url, ResourceBundle rb){
+    public void initialize(URL url, ResourceBundle rb) {
         userOne = "christian";
         userTwo = "gustaf";
         userThree = "clientapp";
-        ObservableList<String> userList = FXCollections.observableArrayList(userOne, userTwo,userThree);
+        ObservableList<String> userList = FXCollections.observableArrayList(userOne, userTwo, userThree);
         userPicker.getItems().addAll(userList);
         userPicker.getSelectionModel().select(userThree);
         passwdTextField.setText("123456"); // FOR NOW ONLY!
-        userPicker.setDisable(true);    
+        userPicker.setDisable(true);
         passwdTextField.setDisable(true);
-        
-    }    
+
+    }
 
     @FXML
     private void handleUserPick(ActionEvent event) {
-        
+
     }
 
     @FXML
     private void handlePasswdInput(ActionEvent event) throws IOException, SQLException {
         handleLogin(event);
-        
+
     }
+
     @FXML
     private void handleLoginButton(ActionEvent event) throws IOException, SQLException {
         handleLogin(event);
     }
-    
-    
-   private void handleLogin(ActionEvent event) throws IOException, SQLException{
-       
+
+    private void handleLogin(ActionEvent event) throws IOException, SQLException {
+
         String user = userPicker.getValue();
-        
+
         String pwd = passwdTextField.getText();
-        if(userPicker.getValue() != null){
-            ConnectionToDb connection= new ConnectionToDb("db.christianekenstedt.se", "medialibrary", userThree, pwd);
+        if (userPicker.getValue() != null) {
+            ConnectionToDb connection = new ConnectionToDb("db.christianekenstedt.se", "medialibrary", userThree, pwd);
             loader = new FXMLLoader(getClass().getResource("/FXMLView/FXMLMainView.fxml"));
             mainParent = loader.load();
-            
+
             Scene mainScene = new Scene(mainParent);
             Stage mainStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             FXMLMainViewController c = loader.getController();
             c.initConnection(connection);
-            if(connection.connectToDatabase()){
+            if (connection.connectToDatabase()) {
                 mainStage.setScene(mainScene);
                 mainStage.hide();
                 mainStage.getIcons().add(new Image("resources/playIcon.png"));
@@ -113,18 +108,22 @@ public class FXMLDocumentController implements Initializable {
                     }
                 });
                 mainStage.show();
-            }else showAlert("Invalid password!");
-        }else showAlert("No user selected!");
-   }
-    
-    private void showAlert(String message){
+            } else {
+                showAlert("Invalid password!");
+            }
+        } else {
+            showAlert("No user selected!");
+        }
+    }
+
+    private void showAlert(String message) {
         alert.setHeaderText("");
         alert.setTitle("Alert!");
         alert.setAlertType(Alert.AlertType.INFORMATION);
-        ((Stage)alert.getDialogPane().getScene().getWindow()).getIcons().add(new Image("resources/playIcon.png"));
+        ((Stage) alert.getDialogPane().getScene().getWindow()).getIcons().add(new Image("resources/playIcon.png"));
         alert.setContentText(message);
         alert.show();
     }
     private final Alert alert = new Alert(Alert.AlertType.INFORMATION);
-    
+
 }

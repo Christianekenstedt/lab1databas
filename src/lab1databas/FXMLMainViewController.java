@@ -41,7 +41,8 @@ import model.Grade;
  *
  * @author Christian Ekenstedt & Gustaf Holmström
  */
-public class FXMLMainViewController implements Initializable {        
+public class FXMLMainViewController implements Initializable {
+
     @FXML
     private MenuBar menuBar;
     @FXML
@@ -65,7 +66,7 @@ public class FXMLMainViewController implements Initializable {
     private ComboBox<String> searchComboBox;
     @FXML
     private MenuItem addAlbumMenuItem;
-    
+
     private ConnectionToDb connection;
     @FXML
     private ComboBox<Genre> genreComboBox;
@@ -75,8 +76,7 @@ public class FXMLMainViewController implements Initializable {
     private Button searchButtonCombo;
     @FXML
     private MenuItem closeMenuItem;
-    
-    
+
     /**
      * Initializes the controller class.
      */
@@ -88,14 +88,13 @@ public class FXMLMainViewController implements Initializable {
         searchComboBox.getItems().addAll(choices);
         searchComboBox.getSelectionModel().select("Get Album by Title");
         searchField.setPromptText("Type here");
-        
-        
-    }    
-    
-    private void disconnectButtonHandle(ActionEvent event) throws SQLException {
-        	connection.closeConnection();
+
     }
-    
+
+    private void disconnectButtonHandle(ActionEvent event) throws SQLException {
+        connection.closeConnection();
+    }
+
     private void showAlbumButtonHandle(ActionEvent event) {
         table.getColumns().clear();
     }
@@ -106,46 +105,49 @@ public class FXMLMainViewController implements Initializable {
 
     @FXML
     private void handleSearchButn(ActionEvent event) throws SQLException {
-        if(!searchField.getText().isEmpty()){
+        if (!searchField.getText().isEmpty()) {
             int selection = 0;
-            if(searchComboBox.getValue().equals("Get Album by Title")) selection = 1;
-            else if(searchComboBox.getValue().equals("Get Album by Artist")) selection = 2;
+            if (searchComboBox.getValue().equals("Get Album by Title")) {
+                selection = 1;
+            } else if (searchComboBox.getValue().equals("Get Album by Artist")) {
+                selection = 2;
+            }
             final int finalSelect = selection;
-            new Thread(){
-                    @Override
-                    public void run(){
-                        try {
-                            ArrayList<Object> list;
-                            if(finalSelect == 1){
-                                list = connection.getAlbumByTitle(searchField.getText());
-                            }else{
-                                list = connection.getAlbumsByArtist(searchField.getText());
-                            }
-                            javafx.application.Platform.runLater(new Runnable(){
-                                @Override
-                                public void run(){
-                                    updateUI(list, finalSelect);
-                                }
-                            });
-                        } catch (SQLException ex) {
-                            Logger.getLogger(FXMLMainViewController.class.getName()).log(Level.SEVERE, null, ex);
+            new Thread() {
+                @Override
+                public void run() {
+                    try {
+                        ArrayList<Object> list;
+                        if (finalSelect == 1) {
+                            list = connection.getAlbumByTitle(searchField.getText());
+                        } else {
+                            list = connection.getAlbumsByArtist(searchField.getText());
                         }
+                        javafx.application.Platform.runLater(new Runnable() {
+                            @Override
+                            public void run() {
+                                updateUI(list, finalSelect);
+                            }
+                        });
+                    } catch (SQLException ex) {
+                        Logger.getLogger(FXMLMainViewController.class.getName()).log(Level.SEVERE, null, ex);
                     }
-                }.start();
-            
+                }
+            }.start();
+
         }
     }
-    
+
     @FXML
     public void addAlbumHandle(ActionEvent event) throws IOException {
-        
+
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/FXMLView/FXMLAddView.fxml"));
         Parent root = loader.load();
-        
+
         AddViewController c = loader.getController();
         c.initData(connection);
         c.updateComboBoxes();
-        
+
         Stage stage = new Stage();
         Scene scene = new Scene(root);
         stage.setScene(scene);
@@ -154,41 +156,41 @@ public class FXMLMainViewController implements Initializable {
         stage.setTitle("Add Album");
         stage.initModality(Modality.APPLICATION_MODAL);
         stage.showAndWait();
-        }
-    
-    public void initConnection(ConnectionToDb connection){
+    }
+
+    public void initConnection(ConnectionToDb connection) {
         this.connection = connection;
         connectedLabel.setTextFill(Color.GREEN);
         connectedLabel.setText("Connected as " + connection.getConnectedUser() + " to " + connection.getHost() + " --> " + connection.getDatabase());
     }
-    
-    public void updateUI(ArrayList<Object> inputList, int select){
-            if(select == 1){ // 1 = AlbumByTitle
-                ObservableList<Object> list =  FXCollections.observableArrayList(inputList);
-                table.getColumns().clear();
-                TableColumn<Object, Integer> cID = new TableColumn<>("AlbumID");
-                cID.setCellValueFactory(new PropertyValueFactory("albumID"));
-                TableColumn<Object, String> cName = new TableColumn<>("Title");
-                cName.setCellValueFactory(new PropertyValueFactory("name"));
-                TableColumn<Object, LocalDate> cDate = new TableColumn<>("Release Date");
-                cDate.setCellValueFactory(new PropertyValueFactory("releaseDate"));
-                table.getColumns().addAll(cID,cName,cDate);
-                table.setItems(list);
-                
-            }else if (select == 2){ // AlbumsByArtist
-                ObservableList<Object> list =  FXCollections.observableArrayList(inputList);
-                table.getColumns().clear();
-                TableColumn<Object, Integer> cID = new TableColumn<>("AlbumID");
-                cID.setCellValueFactory(new PropertyValueFactory("albumID"));
-                TableColumn<Object, String> cName = new TableColumn<>("Title");
-                cName.setCellValueFactory(new PropertyValueFactory("name"));
-                TableColumn<Object, LocalDate> cDate = new TableColumn<>("Release Date");
-                cDate.setCellValueFactory(new PropertyValueFactory("releaseDate"));
-                table.getColumns().addAll(cID,cName,cDate);
-                table.setItems(list);
-            }
+
+    public void updateUI(ArrayList<Object> inputList, int select) {
+        if (select == 1) { // 1 = AlbumByTitle
+            ObservableList<Object> list = FXCollections.observableArrayList(inputList);
+            table.getColumns().clear();
+            TableColumn<Object, Integer> cID = new TableColumn<>("AlbumID");
+            cID.setCellValueFactory(new PropertyValueFactory("albumID"));
+            TableColumn<Object, String> cName = new TableColumn<>("Title");
+            cName.setCellValueFactory(new PropertyValueFactory("name"));
+            TableColumn<Object, LocalDate> cDate = new TableColumn<>("Release Date");
+            cDate.setCellValueFactory(new PropertyValueFactory("releaseDate"));
+            table.getColumns().addAll(cID, cName, cDate);
+            table.setItems(list);
+
+        } else if (select == 2) { // AlbumsByArtist
+            ObservableList<Object> list = FXCollections.observableArrayList(inputList);
+            table.getColumns().clear();
+            TableColumn<Object, Integer> cID = new TableColumn<>("AlbumID");
+            cID.setCellValueFactory(new PropertyValueFactory("albumID"));
+            TableColumn<Object, String> cName = new TableColumn<>("Title");
+            cName.setCellValueFactory(new PropertyValueFactory("name"));
+            TableColumn<Object, LocalDate> cDate = new TableColumn<>("Release Date");
+            cDate.setCellValueFactory(new PropertyValueFactory("releaseDate"));
+            table.getColumns().addAll(cID, cName, cDate);
+            table.setItems(list);
+        }
     }
-    
+
     /*
        _____                            _   _               __  __      _   _               _     
       / ____|                          | | (_)             |  \/  |    | | | |             | |    
@@ -197,9 +199,8 @@ public class FXMLMainViewController implements Initializable {
      | |___| (_) | | | | | | |  __/ (__| |_| | (_) | | | | | |  | |  __/ |_| | | | (_) | (_| \__ \
       \_____\___/|_| |_|_| |_|\___|\___|\__|_|\___/|_| |_| |_|  |_|\___|\__|_| |_|\___/ \__,_|___/
     
-    */
-    
-    /*
+     */
+ /*
       _____      _            _         __  __      _   _               _     
      |  __ \    (_)          | |       |  \/  |    | | | |             | |    
      | |__) | __ ___   ____ _| |_ ___  | \  / | ___| |_| |__   ___   __| |___ 
@@ -207,55 +208,52 @@ public class FXMLMainViewController implements Initializable {
      | |   | |  | |\ V / (_| | ||  __/ | |  | |  __/ |_| | | | (_) | (_| \__ \
      |_|   |_|  |_| \_/ \__,_|\__\___| |_|  |_|\___|\__|_| |_|\___/ \__,_|___/
     
-    */
-
-    
-    /*
+     */
+ /*
       _______ ______ __  __ _____   _____ 
      |__   __|  ____|  \/  |  __ \ / ____|
         | |  | |__  | \  / | |__) | (___  
         | |  |  __| | |\/| |  ___/ \___ \ 
         | |  | |____| |  | | |     ____) |
         |_|  |______|_|  |_|_|    |_____/ 
-    */
-
+     */
     @FXML
     private void handleButtonCombo(ActionEvent event) throws SQLException {
-        if(gradeComboBox.getValue() != null){
-            new Thread(){
-                    @Override
-                    public void run(){
-                        try {
-                            ArrayList<Object> list;
-                            list = connection.getAlbumByGrade(gradeComboBox.getValue().getGradeID());
-                            javafx.application.Platform.runLater(new Runnable(){
-                                @Override
-                                public void run(){
-                                    updateUI(list, 1);
-                                }
-                            });
-                        } catch (SQLException ex) {
-                            Logger.getLogger(FXMLMainViewController.class.getName()).log(Level.SEVERE, null, ex);
-                        }
+        if (gradeComboBox.getValue() != null) {
+            new Thread() {
+                @Override
+                public void run() {
+                    try {
+                        ArrayList<Object> list;
+                        list = connection.getAlbumByGrade(gradeComboBox.getValue().getGradeID());
+                        javafx.application.Platform.runLater(new Runnable() {
+                            @Override
+                            public void run() {
+                                updateUI(list, 1);
+                            }
+                        });
+                    } catch (SQLException ex) {
+                        Logger.getLogger(FXMLMainViewController.class.getName()).log(Level.SEVERE, null, ex);
                     }
-                }.start();
-        }else{
-            new Thread(){
-                    @Override
-                    public void run(){
-                        try {
-                            ArrayList<Object> list;
-                            list = connection.getAlbumByGenre(genreComboBox.getValue().getGenreID());
-                            javafx.application.Platform.runLater(new Runnable(){
-                                @Override
-                                public void run(){
-                                    updateUI(list, 1);
-                                }
-                            });
-                        } catch (SQLException ex) {
-                            Logger.getLogger(FXMLMainViewController.class.getName()).log(Level.SEVERE, null, ex);
-                        }
+                }
+            }.start();
+        } else {
+            new Thread() {
+                @Override
+                public void run() {
+                    try {
+                        ArrayList<Object> list;
+                        list = connection.getAlbumByGenre(genreComboBox.getValue().getGenreID());
+                        javafx.application.Platform.runLater(new Runnable() {
+                            @Override
+                            public void run() {
+                                updateUI(list, 1);
+                            }
+                        });
+                    } catch (SQLException ex) {
+                        Logger.getLogger(FXMLMainViewController.class.getName()).log(Level.SEVERE, null, ex);
                     }
+                }
             }.start();
         }
     }
@@ -271,8 +269,8 @@ public class FXMLMainViewController implements Initializable {
         updateComboBoxes();
         genreComboBox.getSelectionModel().clearSelection();
     }
-    
-    private void updateComboBoxes() throws SQLException{
+
+    private void updateComboBoxes() throws SQLException {
         genreComboBox.setItems(FXCollections.observableArrayList(connection.getGenre()));
         gradeComboBox.setItems(FXCollections.observableArrayList(connection.getGrades()));
     }
@@ -287,10 +285,10 @@ public class FXMLMainViewController implements Initializable {
     private void handleAboutMenuItem(ActionEvent event) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/FXMLView/FXMLAboutView.fxml"));
         Parent root = loader.load();
-        
+
         FXMLAboutViewController c = loader.getController();
         c.initData(connection.getHost(), connection.getDatabase(), connection.getUsername());
-        
+
         Stage stage = new Stage();
         Scene scene = new Scene(root);
         stage.setScene(scene);
@@ -300,5 +298,5 @@ public class FXMLMainViewController implements Initializable {
         stage.initModality(Modality.APPLICATION_MODAL);
         stage.showAndWait();
     }
-    
+
 }

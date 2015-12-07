@@ -1,20 +1,9 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package lab1databas;
 
 import java.net.URL;
 import java.sql.Date;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.time.Instant;
 import java.time.LocalDate;
-import java.time.ZoneId;
-import java.util.ArrayList;
-import static java.util.Collections.list;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -26,7 +15,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextField;
-import model.Album;
 import model.ConnectionToDb;
 import model.Genre;
 import model.Grade;
@@ -50,7 +38,7 @@ public class AddViewController implements Initializable {
     private ComboBox<Grade> gradeComboBox;
     @FXML
     private Button addButton;
-    
+
     private ConnectionToDb connection;
     @FXML
     private TextField nationalityTextField;
@@ -60,33 +48,32 @@ public class AddViewController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        
-    }    
+
+    }
 
     @FXML
-    private void addButtonHandle(ActionEvent event) throws SQLException{
+    private void addButtonHandle(ActionEvent event) throws SQLException {
         String title = titleTextField.getText();
         String artist = artistTextField.getText();
         LocalDate date = datePicker.getValue();
         Genre genre = genreComboBox.getValue();
         Grade grade = gradeComboBox.getValue();
         String nationality = nationalityTextField.getText();
-        
-        if(title.length()>0 && artist.length() > 0 && genre.getGenreID() != null && grade.getGradeID() != null){
+
+        if (title.length() > 0 && artist.length() > 0 && genre.getGenreID() != null && grade.getGradeID() != null) {
             Date d = Date.valueOf(date);
             connection.addAlbum(title, artist, nationality, d, genre, grade);
-        }else{
+        } else {
             System.out.println("Fill all the fields!");
         }
-        
-    
+
     }
-    
-    public void initData(ConnectionToDb connection){
+
+    public void initData(ConnectionToDb connection) {
         this.connection = connection;
     }
-    
-    public void updateComboBoxes(){// Lägg till för grade också
+
+    public void updateComboBoxes() {// Lägg till för grade också
         try {
             // TODO
             genreComboBox.setItems(FXCollections.observableArrayList(connection.getGenre()));
@@ -95,6 +82,5 @@ public class AddViewController implements Initializable {
             Logger.getLogger(AddViewController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
-    
+
 }

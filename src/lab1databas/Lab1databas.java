@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package lab1databas;
 
 import javafx.application.Application;
@@ -17,12 +12,12 @@ import javafx.stage.Stage;
  * @author Christian Ekenstedt & Gustaf Holmström
  */
 public class Lab1databas extends Application {
-    
+
     @Override
     public void start(Stage stage) throws Exception {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/FXMLView/FXMLDocument.fxml"));
-        Parent root = (Parent)loader.load();
-        
+        Parent root = (Parent) loader.load();
+
         Scene scene = new Scene(root);
         stage.setScene(scene);
         stage.setResizable(false);
@@ -37,5 +32,5 @@ public class Lab1databas extends Application {
     public static void main(String[] args) {
         launch(args);
     }
-    
+
 }
