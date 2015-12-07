@@ -15,13 +15,9 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
 /**
- *
+ * Grade contains methods to access the result from the database
  * @author Christian Ekenstedt & Gustaf Holmström
  */
-
-/**
-* Grade contains methods to access the result from the database
-*/
 public class Grade implements Serializable {
 
     private static final long serialVersionUID = 1L;

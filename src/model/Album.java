@@ -29,13 +29,10 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
 /**
- *
+ * Album contains methods to access the result from the database
  * @author Christian Ekenstedt & Gustaf Holmström
  */
 
-/**
-* Album contains methods to access the result from the database
-*/
 public class Album implements Serializable {
     
     private Integer albumID;

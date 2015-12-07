@@ -17,13 +17,9 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
 /**
- *
+ * Genre contains methods to access the result from the database
  * @author Christian Ekenstedt & Gustaf Holmström
  */
-
-/**
-* Genre contains methods to access the result from the database
-*/
 public class Genre implements Serializable {
 
     private Integer genreID;

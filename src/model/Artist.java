@@ -21,13 +21,9 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
 /**
- *
+ * Artist contains methods to access the result from the database
  * @author Christian Ekenstedt & Gustaf Holmström
  */
-
-/**
-* Artist contains methods to access the result from the database
-*/
 public class Artist implements Serializable {
 
     private Integer artistID;
