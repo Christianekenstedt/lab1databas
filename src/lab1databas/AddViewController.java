@@ -65,10 +65,16 @@ public class AddViewController implements Initializable {
         
         if(title.length()>0 && artist.length() > 0 && genre.getGenreID() != null && grade.getGradeID() != null){
             Date d = Date.valueOf(date);
-            connection.addAlbum(title, artist, nationality, d, genre, grade);
-            Node source = (Node)event.getSource();
-            Stage stage = (Stage) source.getScene().getWindow();
-            stage.close();
+            new Thread(){
+                @Override
+                public void run(){
+                    try {
+                        connection.addAlbum(title, artist, nationality, d, genre, grade);
+                    } catch (SQLException ex) {
+                        Logger.getLogger(AddViewController.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+            }.start();
         }else{
             System.out.println("Fill all the fields!");
         }
