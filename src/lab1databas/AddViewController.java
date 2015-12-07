@@ -34,7 +34,7 @@ import model.Grade;
 /**
  * FXML Controller class
  *
- * @author chris
+ * @author Christian Ekenstedt & Gustaf Holmström
  */
 public class AddViewController implements Initializable {
 

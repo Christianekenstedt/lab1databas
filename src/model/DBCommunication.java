@@ -6,7 +6,7 @@ import java.util.ArrayList;
 
 /**
  *
- * @author chris
+ * @author Christian Ekenstedt & Gustaf Holmström
  */
 public interface DBCommunication {
     

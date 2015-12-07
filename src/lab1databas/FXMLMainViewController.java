@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package lab1databas;
 
 import java.io.IOException;
@@ -32,6 +27,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.stage.Modality;
@@ -43,7 +39,7 @@ import model.Grade;
 /**
  * FXML Controller class
  *
- * @author chris
+ * @author Christian Ekenstedt & Gustaf Holmström
  */
 public class FXMLMainViewController implements Initializable {        
     @FXML
@@ -153,6 +149,7 @@ public class FXMLMainViewController implements Initializable {
         Stage stage = new Stage();
         Scene scene = new Scene(root);
         stage.setScene(scene);
+        stage.getIcons().add(new Image("resources/playIcon.png"));
         stage.setResizable(false);
         stage.setTitle("Add Album");
         stage.initModality(Modality.APPLICATION_MODAL);
@@ -162,7 +159,7 @@ public class FXMLMainViewController implements Initializable {
     public void initConnection(ConnectionToDb connection){
         this.connection = connection;
         connectedLabel.setTextFill(Color.GREEN);
-        connectedLabel.setText("Connected as " + connection.getConnectedUser());
+        connectedLabel.setText("Connected as " + connection.getConnectedUser() + " to " + connection.getHost() + " --> " + connection.getDatabase());
     }
     
     public void updateUI(ArrayList<Object> inputList, int select){
@@ -297,6 +294,7 @@ public class FXMLMainViewController implements Initializable {
         Stage stage = new Stage();
         Scene scene = new Scene(root);
         stage.setScene(scene);
+        stage.getIcons().add(new Image("resources/playIcon.png"));
         stage.setTitle("About");
         stage.setResizable(false);
         stage.initModality(Modality.APPLICATION_MODAL);

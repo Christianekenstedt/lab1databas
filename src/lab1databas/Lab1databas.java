@@ -9,11 +9,12 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 /**
  *
- * @author chris
+ * @author Christian Ekenstedt & Gustaf Holmström
  */
 public class Lab1databas extends Application {
     
@@ -24,6 +25,8 @@ public class Lab1databas extends Application {
         
         Scene scene = new Scene(root);
         stage.setScene(scene);
+        stage.setResizable(false);
+        stage.getIcons().add(new Image("resources/playIcon.png"));
         stage.setTitle("Media Library Login");
         stage.show();
     }

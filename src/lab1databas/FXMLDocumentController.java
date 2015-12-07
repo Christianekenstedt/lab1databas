@@ -25,13 +25,14 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import model.ConnectionToDb;
 
 /**
  *
- * @author chris
+ * @author Christian Ekenstedt & Gustaf Holmström
  */
 public class FXMLDocumentController implements Initializable {
     
@@ -47,7 +48,7 @@ public class FXMLDocumentController implements Initializable {
     @FXML
     private Label titleLabel;
     
-    private String userOne = "christian", userTwo = "gustaf";
+    private String userOne, userTwo, userThree;
     
     private Parent mainParent;
     private FXMLLoader loader;
@@ -57,8 +58,16 @@ public class FXMLDocumentController implements Initializable {
     
     @Override
     public void initialize(URL url, ResourceBundle rb){
-        ObservableList<String> userList = FXCollections.observableArrayList(userOne, userTwo);
+        userOne = "christian";
+        userTwo = "gustaf";
+        userThree = "clientapp";
+        ObservableList<String> userList = FXCollections.observableArrayList(userOne, userTwo,userThree);
         userPicker.getItems().addAll(userList);
+        userPicker.getSelectionModel().select(userThree);
+        passwdTextField.setText("123456"); // FOR NOW ONLY!
+        userPicker.setDisable(true);    
+        passwdTextField.setDisable(true);
+        
     }    
 
     @FXML
@@ -80,9 +89,10 @@ public class FXMLDocumentController implements Initializable {
    private void handleLogin(ActionEvent event) throws IOException, SQLException{
        
         String user = userPicker.getValue();
+        
         String pwd = passwdTextField.getText();
         if(userPicker.getValue() != null){
-            ConnectionToDb connection= new ConnectionToDb("db.christianekenstedt.se", "medialibrary", user, pwd);
+            ConnectionToDb connection= new ConnectionToDb("db.christianekenstedt.se", "medialibrary", userThree, pwd);
             loader = new FXMLLoader(getClass().getResource("/FXMLView/FXMLMainView.fxml"));
             mainParent = loader.load();
             
@@ -93,6 +103,7 @@ public class FXMLDocumentController implements Initializable {
             if(connection.connectToDatabase()){
                 mainStage.setScene(mainScene);
                 mainStage.hide();
+                mainStage.getIcons().add(new Image("resources/playIcon.png"));
                 mainStage.setTitle("Media Library");
                 mainStage.setOnCloseRequest((WindowEvent event1) -> {
                     try {
@@ -109,6 +120,8 @@ public class FXMLDocumentController implements Initializable {
     private void showAlert(String message){
         alert.setHeaderText("");
         alert.setTitle("Alert!");
+        alert.setAlertType(Alert.AlertType.INFORMATION);
+        ((Stage)alert.getDialogPane().getScene().getWindow()).getIcons().add(new Image("resources/playIcon.png"));
         alert.setContentText(message);
         alert.show();
     }
