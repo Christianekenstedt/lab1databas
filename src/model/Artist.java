@@ -49,52 +49,101 @@ public class Artist implements Serializable {
     @ManyToMany(mappedBy = "artistCollection")
     private Collection<Album> albumCollection;
 
+    /**
+     *
+     */
     public Artist() {
     }
 
+    /**
+     *
+     * @param artistID
+     */
     public Artist(Integer artistID) {
         this.artistID = artistID;
     }
 
+    /**
+     *
+     * @param artistID
+     * @param name
+     * @param nationality
+     */
     public Artist(Integer artistID, String name, String nationality) {
         this.artistID = artistID;
         this.name = name;
         this.nationality = nationality;
     }
 
+    /**
+     *
+     * @return
+     */
     public Integer getArtistID() {
         return artistID;
     }
 
+    /**
+     *
+     * @param artistID
+     */
     public void setArtistID(Integer artistID) {
         this.artistID = artistID;
     }
 
+    /**
+     *
+     * @return
+     */
     public String getName() {
         return name;
     }
 
+    /**
+     *
+     * @param name
+     */
     public void setName(String name) {
         this.name = name;
     }
 
+    /**
+     *
+     * @return
+     */
     public String getNationality() {
         return nationality;
     }
 
+    /**
+     *
+     * @param nationality
+     */
     public void setNationality(String nationality) {
         this.nationality = nationality;
     }
 
+    /**
+     *
+     * @return
+     */
     @XmlTransient
     public Collection<Album> getAlbumCollection() {
         return albumCollection;
     }
 
+    /**
+     *
+     * @param albumCollection
+     */
     public void setAlbumCollection(Collection<Album> albumCollection) {
         this.albumCollection = albumCollection;
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public int hashCode() {
         int hash = 0;
@@ -102,6 +151,11 @@ public class Artist implements Serializable {
         return hash;
     }
 
+    /**
+     *
+     * @param object
+     * @return
+     */
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
@@ -115,6 +169,10 @@ public class Artist implements Serializable {
         return true;
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public String toString() {
         return "model.Artist[ artistID=" + artistID + " ]";

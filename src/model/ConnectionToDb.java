@@ -23,6 +23,13 @@ public class ConnectionToDb implements DBCommunication{
     private String host;
     private String database;
        
+    /**
+     * 
+     * @param host, the address for the server
+     * @param database, which database to connect to
+     * @param username, name of the user(has to be defined in the database)
+     * @param password, password to the selected user
+     */
     public ConnectionToDb(String host, String database, String username, String password){
         this.host = host;
         this.database = database;
@@ -31,20 +38,35 @@ public class ConnectionToDb implements DBCommunication{
         con = null;
     }
 
+    /**
+     *
+     * @return  the current username
+     */
     public String getUsername() {
         return username;
     }
 
+    /**
+     *
+     * @return  the adress of the server
+     */
     public String getHost() {
         return host;
     }
 
+    /**
+     *
+     * @return  which database is selected
+     */
     public String getDatabase() {
         return database;
     }
     
-    
-    
+    /**
+     *
+     * @return  boolean wherer the connection is successful, true if success
+     * @throws SQLException
+     */
     public boolean connectToDatabase()throws SQLException{
         String server = "jdbc:mysql://" + host + ":3306/" + database +
 			"?UseClientEnc=UTF8";
@@ -65,6 +87,10 @@ public class ConnectionToDb implements DBCommunication{
         }
     }
     
+    /**
+     * Closes the connection to the server
+     * @throws SQLException 
+     */
     public void closeConnection() throws SQLException{
         if(con != null) {
             con.close();
@@ -73,6 +99,16 @@ public class ConnectionToDb implements DBCommunication{
         }
     }
     
+    /**
+     * Add album to database
+     * @param title, of the album you want to add
+     * @param artist, of the album you want to add(will check if artist is already in the database)
+     * @param nationality, nationality of the artist
+     * @param date, date the album was released
+     * @param genre, of the album
+     * @param grade, of the album
+     * @throws SQLException
+     */
     @Override
     public void addAlbum(String title, String artist, String nationality, Date date, Genre genre, Grade grade) throws SQLException{
         
@@ -137,8 +173,12 @@ public class ConnectionToDb implements DBCommunication{
     
     }
     
-    
-    
+    /**
+     * search for album by artist
+     * @param name, name of the arist
+     * @return, will return arraylist of the artist's album
+     * @throws SQLException
+     */
     @Override
     public ArrayList<Object> getAlbumsByArtist(String name) throws SQLException{
         ResultSet rs = null;
@@ -160,6 +200,12 @@ public class ConnectionToDb implements DBCommunication{
         }
     }
     
+    /**
+     * get album by title in a arraylist
+     * @param name, of the album
+     * @return, will return artist's name from the database
+     * @throws SQLException
+     */
     @Override
     public ArrayList<Object> getAlbumByTitle(String name) throws SQLException{
         ResultSet rs = null;
@@ -180,6 +226,11 @@ public class ConnectionToDb implements DBCommunication{
         }
     }
     
+    /**
+     * get's arraylist of all available genras
+     * @return, get's all the current genras available to use from the database
+     * @throws SQLException
+     */
     @Override
     public ArrayList<Genre> getGenre() throws SQLException{
         ResultSet rs = null;
@@ -199,6 +250,11 @@ public class ConnectionToDb implements DBCommunication{
         }
     }
     
+    /**
+     * get's arraylsit with available grades
+     * @return, names of the grades.
+     * @throws SQLException
+     */
     @Override
     public ArrayList<Grade> getGrades() throws SQLException{
         ResultSet rs = null;
@@ -217,10 +273,21 @@ public class ConnectionToDb implements DBCommunication{
             rs.close();
         }
     }
+
+    /**
+     * returns string with teh connected users name
+     * @return get's the connected users name
+     */
     public String getConnectedUser(){
         return username;
     }
 
+    /**
+     * get's all albums with selected genre
+     * @param genre, chosen genra
+     * @return, arraylist of all album with chosen genra
+     * @throws SQLException
+     */
     @Override
     public ArrayList<Object> getAlbumByGenre(int genre) throws SQLException {
         ResultSet rs = null;
@@ -241,6 +308,12 @@ public class ConnectionToDb implements DBCommunication{
         }
     }
 
+    /**
+     * get's all album by selected grade
+     * @param grade, chosen grade
+     * @return, arraylist of all album with the chosen grade
+     * @throws SQLException
+     */
     @Override
     public ArrayList<Object> getAlbumByGrade(int grade) throws SQLException {
         ResultSet rs = null;

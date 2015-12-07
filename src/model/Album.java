@@ -69,77 +69,150 @@ public class Album implements Serializable {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "album")
     private Collection<Review> reviewCollection;
 
+    /**
+     *
+     */
     public Album() {
     }
 
+    /**
+     *
+     * @param albumID
+     */
     public Album(Integer albumID) {
         this.albumID = albumID;
     }
 
+    /**
+     *
+     * @param albumID
+     * @param name
+     * @param releaseDate
+     */
     public Album(Integer albumID, String name, Date releaseDate) {
         this.albumID = albumID;
         this.name = name;
         this.releaseDate = releaseDate;
     }
 
+    /**
+     *
+     * @return
+     */
     public Integer getAlbumID() {
         return albumID;
     }
 
+    /**
+     *
+     * @param albumID
+     */
     public void setAlbumID(Integer albumID) {
         this.albumID = albumID;
     }
 
+    /**
+     *
+     * @return
+     */
     public String getName() {
         return name;
     }
 
+    /**
+     *
+     * @param name
+     */
     public void setName(String name) {
         this.name = name;
     }
 
+    /**
+     *
+     * @return
+     */
     public Date getReleaseDate() {
         return releaseDate;
     }
 
+    /**
+     *
+     * @param releaseDate
+     */
     public void setReleaseDate(Date releaseDate) {
         this.releaseDate = releaseDate;
     }
 
+    /**
+     *
+     * @return
+     */
     @XmlTransient
     public Collection<Artist> getArtistCollection() {
         return artistCollection;
     }
 
+    /**
+     *
+     * @param artistCollection
+     */
     public void setArtistCollection(Collection<Artist> artistCollection) {
         this.artistCollection = artistCollection;
     }
 
+    /**
+     *
+     * @return
+     */
     public Genre getGenre() {
         return genre;
     }
 
+    /**
+     *
+     * @param genre
+     */
     public void setGenre(Genre genre) {
         this.genre = genre;
     }
 
+    /**
+     *
+     * @return
+     */
     public Grade getGrade() {
         return grade;
     }
 
+    /**
+     *
+     * @param grade
+     */
     public void setGrade(Grade grade) {
         this.grade = grade;
     }
 
+    /**
+     *
+     * @return
+     */
     @XmlTransient
     public Collection<Review> getReviewCollection() {
         return reviewCollection;
     }
 
+    /**
+     *
+     * @param reviewCollection
+     */
     public void setReviewCollection(Collection<Review> reviewCollection) {
         this.reviewCollection = reviewCollection;
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public int hashCode() {
         int hash = 0;
@@ -147,6 +220,11 @@ public class Album implements Serializable {
         return hash;
     }
 
+    /**
+     *
+     * @param object
+     * @return
+     */
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
@@ -160,6 +238,10 @@ public class Album implements Serializable {
         return true;
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public String toString() {
         return "model.Album[ albumID=" + albumID + " ]";

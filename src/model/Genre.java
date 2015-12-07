@@ -46,43 +46,83 @@ public class Genre implements Serializable {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "genre")
     private Collection<Album> albumCollection;
 
+    /**
+     *
+     */
     public Genre() {
     }
 
+    /**
+     *
+     * @param genreID
+     */
     public Genre(Integer genreID) {
         this.genreID = genreID;
     }
 
+    /**
+     *
+     * @param genreID
+     * @param name
+     */
     public Genre(Integer genreID, String name) {
         this.genreID = genreID;
         this.name = name;
     }
 
+    /**
+     *
+     * @return
+     */
     public Integer getGenreID() {
         return genreID;
     }
 
+    /**
+     *
+     * @param genreID
+     */
     public void setGenreID(Integer genreID) {
         this.genreID = genreID;
     }
 
+    /**
+     *
+     * @return
+     */
     public String getName() {
         return name;
     }
 
+    /**
+     *
+     * @param name
+     */
     public void setName(String name) {
         this.name = name;
     }
 
+    /**
+     *
+     * @return
+     */
     @XmlTransient
     public Collection<Album> getAlbumCollection() {
         return albumCollection;
     }
 
+    /**
+     *
+     * @param albumCollection
+     */
     public void setAlbumCollection(Collection<Album> albumCollection) {
         this.albumCollection = albumCollection;
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public int hashCode() {
         int hash = 0;
@@ -90,6 +130,11 @@ public class Genre implements Serializable {
         return hash;
     }
 
+    /**
+     *
+     * @param object
+     * @return
+     */
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
@@ -103,6 +148,10 @@ public class Genre implements Serializable {
         return true;
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public String toString() {
         return getName();

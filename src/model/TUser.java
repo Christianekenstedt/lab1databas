@@ -45,38 +45,73 @@ public class TUser implements Serializable {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
     private Collection<Review> reviewCollection;
 
+    /**
+     *
+     */
     public TUser() {
     }
 
+    /**
+     *
+     * @param userID
+     */
     public TUser(Integer userID) {
         this.userID = userID;
     }
 
+    /**
+     *
+     * @return
+     */
     public Integer getUserID() {
         return userID;
     }
 
+    /**
+     *
+     * @param userID
+     */
     public void setUserID(Integer userID) {
         this.userID = userID;
     }
 
+    /**
+     *
+     * @return
+     */
     public String getName() {
         return name;
     }
 
+    /**
+     *
+     * @param name
+     */
     public void setName(String name) {
         this.name = name;
     }
 
+    /**
+     *
+     * @return
+     */
     @XmlTransient
     public Collection<Review> getReviewCollection() {
         return reviewCollection;
     }
 
+    /**
+     *
+     * @param reviewCollection
+     */
     public void setReviewCollection(Collection<Review> reviewCollection) {
         this.reviewCollection = reviewCollection;
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public int hashCode() {
         int hash = 0;
@@ -84,6 +119,11 @@ public class TUser implements Serializable {
         return hash;
     }
 
+    /**
+     *
+     * @param object
+     * @return
+     */
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
@@ -97,6 +137,10 @@ public class TUser implements Serializable {
         return true;
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public String toString() {
         return "model.TUser[ userID=" + userID + " ]";

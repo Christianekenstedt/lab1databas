@@ -47,45 +47,88 @@ public class Review implements Serializable {
     @ManyToOne(optional = false)
     private TUser user;
 
+    /**
+     *
+     */
     public Review() {
     }
 
+    /**
+     *
+     * @param reviewID
+     */
     public Review(Integer reviewID) {
         this.reviewID = reviewID;
     }
 
+    /**
+     *
+     * @return
+     */
     public Integer getReviewID() {
         return reviewID;
     }
 
+    /**
+     *
+     * @param reviewID
+     */
     public void setReviewID(Integer reviewID) {
         this.reviewID = reviewID;
     }
 
+    /**
+     *
+     * @return
+     */
     public String getText() {
         return text;
     }
 
+    /**
+     *
+     * @param text
+     */
     public void setText(String text) {
         this.text = text;
     }
 
+    /**
+     *
+     * @return
+     */
     public Album getAlbum() {
         return album;
     }
 
+    /**
+     *
+     * @param album
+     */
     public void setAlbum(Album album) {
         this.album = album;
     }
 
+    /**
+     *
+     * @return
+     */
     public TUser getUser() {
         return user;
     }
 
+    /**
+     *
+     * @param user
+     */
     public void setUser(TUser user) {
         this.user = user;
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public int hashCode() {
         int hash = 0;
@@ -93,6 +136,11 @@ public class Review implements Serializable {
         return hash;
     }
 
+    /**
+     *
+     * @param object
+     * @return
+     */
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
@@ -106,6 +154,10 @@ public class Review implements Serializable {
         return true;
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public String toString() {
         return "model.Review[ reviewID=" + reviewID + " ]";
